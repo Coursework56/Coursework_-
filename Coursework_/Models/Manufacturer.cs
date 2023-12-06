@@ -1,4 +1,6 @@
-﻿namespace Coursework_.Models
+﻿using Coursework_.ViewModels;
+
+namespace Coursework_.Models
 {
     public class Manufacturer
     {
@@ -8,6 +10,15 @@
         public string Country { get; set; }
 
         // Зв'язок один до багатьох з товарами
-        public List<Product> Products { get; set; }
+        public List<Product>? Products { get; set; }
+
+        public Manufacturer() { }
+        public Manufacturer(ManufacturerViewModel manufacturerViewModel)
+        {
+            Id = manufacturerViewModel.Id;
+            Name = manufacturerViewModel.Name;
+            Description = manufacturerViewModel.Description;
+            Country = manufacturerViewModel.Country;
+        }
     }
 }

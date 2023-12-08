@@ -10,6 +10,7 @@ namespace Coursework_.Models
         // Підкатегорії
         public int? ParentCategoryId { get; set; }
         public Category? ParentCategory { get; set; }
+        public List<Category>? ChildCategories { get; set; }
         // Зв'язок один до багатьох з товарами
         public List<Product>? Products { get; set; }
 

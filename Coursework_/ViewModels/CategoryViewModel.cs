@@ -15,6 +15,8 @@ namespace Coursework_.ViewModels
         // Підкатегорії
         public int? ParentCategoryId { get; set; }
         public string? ParentCategory { get; set; }
+
+        public List<CategoryViewModel>? ChildCategories { get; set; }
         // Зв'язок один до багатьох з товарами
         public List<ProductViewModel>? ProductsViews { get; set; }
 
@@ -23,14 +25,26 @@ namespace Coursework_.ViewModels
         {
             Id = category.Id;
             Name = category.Name;
+
             if(category.ParentCategoryId != null)
             {
                 ParentCategoryId = category.ParentCategoryId;
             }
+
             if (category.ParentCategory != null)
             {
                 ParentCategory = category.ParentCategory.Name;
             }
+
+            if (category.ParentCategory != null)
+            {
+                ChildCategories = new List<CategoryViewModel>();
+                foreach(var ChildCategory in category.ChildCategories)
+                {
+                    ChildCategories.Add(new CategoryViewModel(ChildCategory));
+                }
+            }
+
             if(category.Products != null)
             {
                 ProductsViews = new List<ProductViewModel>();

@@ -6,22 +6,32 @@ namespace Coursework_.ViewModels
 {
     public class ManufacturerViewModel
     {
+        // Унікальний ідентифікатор виробника
         public int Id { get; set; }
-        [Required]
+
+        // Назва виробника з обов'язковими обмеженнями
+        [Required(ErrorMessage = "Name is required")]
         [Remote("IsNameUnique", "Product", ErrorMessage = "This name is already in use")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Length must be more than 2 characters")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Length must be between 3 and 20 characters")]
         public string Name { get; set; }
-        [Required]
-        [StringLength(200, MinimumLength = 3, ErrorMessage = "Length must be more than 2 characters")]
+
+        // Опис виробника з обов'язковими обмеженнями
+        [Required(ErrorMessage = "Description is required")]
+        [StringLength(200, MinimumLength = 3, ErrorMessage = "Length must be between 3 and 200 characters")]
         public string Description { get; set; }
-        [Required]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Length must be more than 2 characters")]
+
+        // Країна виробника з обов'язковими обмеженнями
+        [Required(ErrorMessage = "Country is required")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Length must be between 3 and 20 characters")]
         public string Country { get; set; }
 
-        // Зв'язок один до багатьох з товарами
+        // Список відображень товарів для даного виробника
         public List<ProductViewModel>? ProductsViews { get; set; }
 
+        // Конструктор за замовчуванням
         public ManufacturerViewModel() { }
+
+        // Конструктор, який приймає об'єкт типу Manufacturer і ініціалізує відповідні властивості
         public ManufacturerViewModel(Manufacturer manufacturer)
         {
             Id = manufacturer.Id;
@@ -29,10 +39,11 @@ namespace Coursework_.ViewModels
             Description = manufacturer.Description;
             Country = manufacturer.Country;
 
-            if(manufacturer.Products != null)
+            // Ініціалізація товарів для даного виробника, якщо вони існують
+            if (manufacturer.Products != null)
             {
                 ProductsViews = new List<ProductViewModel>();
-                foreach(var  product in manufacturer.Products)
+                foreach (var product in manufacturer.Products)
                 {
                     ProductsViews.Add(new ProductViewModel(product));
                 }

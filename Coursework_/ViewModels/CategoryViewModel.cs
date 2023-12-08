@@ -6,53 +6,67 @@ namespace Coursework_.ViewModels
 {
     public class CategoryViewModel
     {
+        // Унікальний ідентифікатор категорії
         public int Id { get; set; }
+
+        // Назва категорії з обов'язковими обмеженнями
         [Required]
         [Remote("IsNameUnique", "Product", ErrorMessage = "This name is already in use")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Length must be more than 2 characters")]
         public string Name { get; set; }
 
-        // Підкатегорії
+        // Ідентифікатор батьківської категорії (якщо існує)
         public int? ParentCategoryId { get; set; }
+
+        // Назва батьківської категорії (якщо існує)
         public string? ParentCategory { get; set; }
 
+        // Список дочірніх категорій
         public List<CategoryViewModel>? ChildCategories { get; set; }
-        // Зв'язок один до багатьох з товарами
+
+        // Список відображень товарів для поточної категорії
         public List<ProductViewModel>? ProductsViews { get; set; }
 
+        // Конструктор за замовчуванням
         public CategoryViewModel() { }
-        public CategoryViewModel(Category category) 
+
+        // Конструктор, який приймає об'єкт типу Category і ініціалізує відповідні властивості
+        public CategoryViewModel(Category category)
         {
             Id = category.Id;
             Name = category.Name;
 
-            if(category.ParentCategoryId != null)
+            // Ініціалізація батьківської категорії, якщо вона існує
+            if (category.ParentCategoryId != null)
             {
                 ParentCategoryId = category.ParentCategoryId;
             }
 
+            // Ініціалізація назви батьківської категорії, якщо вона існує
             if (category.ParentCategory != null)
             {
                 ParentCategory = category.ParentCategory.Name;
             }
 
+            // Ініціалізація дочірніх категорій, якщо вони існують
             if (category.ParentCategory != null)
             {
                 ChildCategories = new List<CategoryViewModel>();
-                foreach(var ChildCategory in category.ChildCategories)
+                foreach (var ChildCategory in category.ChildCategories)
                 {
                     ChildCategories.Add(new CategoryViewModel(ChildCategory));
                 }
             }
 
-            if(category.Products != null)
+            // Ініціалізація товарів для поточної категорії, якщо вони існують
+            if (category.Products != null)
             {
                 ProductsViews = new List<ProductViewModel>();
-                foreach(var product in category.Products)
+                foreach (var product in category.Products)
                 {
                     ProductsViews.Add(new ProductViewModel(product));
                 }
             }
-        } 
+        }
     }
 }

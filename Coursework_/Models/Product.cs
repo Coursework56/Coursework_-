@@ -4,20 +4,37 @@ namespace Coursework_.Models
 {
     public class Product
     {
+        // Унікальний ідентифікатор товару
         public int Id { get; set; }
 
+        // Назва товару
         public string Name { get; set; }
+
+        // Опис товару
         public string Description { get; set; }
+
+        // Ціна товару
         public decimal Price { get; set; }
+
+        // Шлях до фотографії товару
         public string PhotoPath { get; set; }
 
+        // Ідентифікатор категорії товару
         public int CategoryId { get; set; }
+
+        // Категорія товару (якщо існує)
         public Category? Category { get; set; }
 
+        // Ідентифікатор виробника товару
         public int ManufacturerId { get; set; }
-        public Manufacturer? Manufacturer { get; set;}
 
+        // Виробник товару (якщо існує)
+        public Manufacturer? Manufacturer { get; set; }
+
+        // Конструктор за замовчуванням
         public Product() { }
+
+        // Конструктор, який приймає об'єкт типу ProductViewModel і ініціалізує відповідні властивості
         public Product(ProductViewModel productViewModel)
         {
             Id = productViewModel.Id;

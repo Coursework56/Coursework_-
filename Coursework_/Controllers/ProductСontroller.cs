@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Coursework_.Controllers
 {
-    public class CategoryController : Controller
+    public class ProductСontroller : Controller
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public CategoryController(ApplicationDbContext dbContext)
+        public ProductСontroller(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }

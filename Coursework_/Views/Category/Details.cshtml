@@ -1,0 +1,64 @@
+﻿@model Coursework_.ViewModels.CategoryViewModel
+
+<h2>Details</h2>
+<div>
+    <h3>@Model.Name</h3>
+    @if (Model.ProductsViews == null)
+    {
+        <h3>This category has no products</h3>
+    }
+    @if (Model.ChildCategories != null)
+    {
+        <aside>
+            <ul>
+                @foreach (var subCategory in Model.ChildCategories)
+                {
+                    <li>
+                        <a asp-action="Details" asp-route-id="@subCategory.Id"></a>
+                    </li>
+                }
+            </ul>
+        </aside>
+    }
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Manufacturer
+                </th>
+                <th>
+                    Description
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProductsViews)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Price
+                    </td>
+                    <td>
+                        @item.Manufacturer
+                    </td>
+                    <td>
+                        @item.Description
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-controller="Category" asp-action="Index">Back to List</a>
+</div>
+

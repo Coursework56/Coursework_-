@@ -49,7 +49,7 @@ namespace Coursework_.ViewModels
             }
 
             // Ініціалізація дочірніх категорій, якщо вони існують
-            if (category.ParentCategory != null)
+            if (category.ChildCategories != null)
             {
                 ChildCategories = new List<CategoryViewModel>();
                 foreach (var ChildCategory in category.ChildCategories)

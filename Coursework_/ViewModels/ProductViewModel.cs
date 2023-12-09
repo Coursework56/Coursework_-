@@ -29,6 +29,10 @@ namespace Coursework_.ViewModels
         [Required(ErrorMessage = "Photo path is required")]
         public string PhotoPath { get; set; }
 
+        // Кількість товару
+        [Range(1, int.MaxValue, ErrorMessage = "Price must be greater than 0")]
+        public int Amount { get; set; }
+
         // Ідентифікатор категорії товару з обов'язковими обмеженнями
         [Required(ErrorMessage = "Category ID is required")]
         public int CategoryId { get; set; }
@@ -56,6 +60,7 @@ namespace Coursework_.ViewModels
             PhotoPath = product.PhotoPath;
             ManufacturerId = product.ManufacturerId;
             CategoryId = product.CategoryId;
+            Amount = product.Amount;
 
             // Ініціалізація назви виробника (якщо існує)
             Manufacturer = product.Manufacturer != null ? product.Manufacturer.Name : "Not found";
@@ -64,5 +69,4 @@ namespace Coursework_.ViewModels
             Category = product.Category != null ? product.Category.Name : "Not found";
         }
     }
-
 }

@@ -1,8 +1,8 @@
+﻿using Coursework_.Data;
 using Coursework_.Models;
 using Coursework_.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace Coursework_.Controllers
 {
@@ -15,124 +15,233 @@ namespace Coursework_.Controllers
             _dbContext = dbContext;
         }
 
+        // GET: /Category
         public IActionResult Index()
         {
-            var categories = _dbContext.Categories
-                .Include(c => c.Products)
-                .ToList()
+            // Отримуємо всі категорії з бази даних разом з дочірніми категоріями
+            var categoriesView = _dbContext.Categories
+                .Include(c => c.ChildCategories)
                 .Select(c => new CategoryViewModel(c))
                 .ToList();
 
-            return View(categories);
+            return View(categoriesView);
         }
 
-        [HttpGet]
-        public IActionResult CreateCategory()
+        // GET: /Category/Details/5
+        public IActionResult Details(int id)
         {
-            return View();
+            // Знаходимо категорію за ідентифікатором в базі даних
+            var category = FindCategory(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var categoryView = new CategoryViewModel(category);
+
+            var productViews = new List<ProductViewModel>();
+
+            // Додаємо товари поточної категорії до списку productViews
+            if (categoryView.ProductsViews != null)
+            {
+                foreach (var productView in categoryView.ProductsViews)
+                {
+                    productViews.Add(productView);
+                }
+            }
+
+            // Додаємо товари з усіх дочірніх категорій до списку productViews
+            if (categoryView.ChildCategories != null)
+            {
+                foreach (var childCategory in categoryView.ChildCategories)
+                {
+                    category = FindCategory(childCategory.Id);
+                    if (category != null && category.Products != null)
+                    {
+                        foreach (var product in category.Products)
+                        {
+                            productViews.Add(new ProductViewModel(product));
+                        }
+                    }
+                }
+            }
+
+            // Якщо є товари, передаємо їх у ViewBag.Products
+            if (productViews.Count > 0)
+            {
+                ViewBag.Products = productViews;
+            }
+
+            return View(categoryView);
         }
 
+        // GET: /Category/Create
+        public IActionResult Create(int? parentCategoryId)
+        {
+            // Отримуємо батьківську категорію за ідентифікатором
+            var parentCategory = _dbContext.Categories.FirstOrDefault(c => c.Id == parentCategoryId);
+            var categoryView = new CategoryViewModel()
+            {
+                ParentCategoryId = parentCategoryId,
+                ParentCategory = parentCategory != null ? parentCategory.Name : null
+            };
+
+            return View(categoryView);
+        }
+
+        // POST: /Category/Create
         [HttpPost]
-        public IActionResult CreateCategory(CategoryViewModel categoryViewModel)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(CategoryViewModel categoryView)
         {
             if (ModelState.IsValid)
             {
-                // Конвертація з CategoryViewModel до Category
-                var category = new Category
+                // Перевіряємо унікальність назви категорії в базі даних
+                if (_dbContext.Categories.Any(c => c.Name.ToLower() == categoryView.Name.ToLower()))
                 {
-                    Name = categoryViewModel.Name,
-                    // Інші поля ініціалізуємо за необхідності
-                };
+                    ViewData["ErrorMessage"] = $"Категорія {categoryView.Name} вже існує";
+                    return View(categoryView);
+                }
 
+                // Створюємо нову категорію та зберігаємо її в базі даних
+                var category = new Category(categoryView);
                 _dbContext.Categories.Add(category);
                 _dbContext.SaveChanges();
 
                 return RedirectToAction("Index");
             }
 
-            return View(categoryViewModel);
+            return View(categoryView);
         }
 
-        [HttpGet]
-        public IActionResult EditCategory(int? id)
+        // GET: /Category/Edit/5
+        public IActionResult Edit(int? Id)
         {
-            if (id == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var category = _dbContext.Categories.Find(id);
+            // Отримуємо категорію для редагування
+            var category = _dbContext.Categories
+                .Include(c => c.ChildCategories)
+                .FirstOrDefault(s => s.Id == Id);
 
             if (category == null)
-            {
                 return NotFound();
-            }
 
-            var categoryViewModel = new CategoryViewModel(category);
-
-            return View(categoryViewModel);
+            var categoryModel = new CategoryViewModel(category);
+            return View(categoryModel);
         }
 
+        // POST: /Category/Edit/5
         [HttpPost]
-        public IActionResult EditCategory(int id, CategoryViewModel categoryViewModel)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int Id, CategoryViewModel categoryModel)
         {
-            if (id != categoryViewModel.Id)
+            if (Id != categoryModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                // Перевіряємо унікальність назви категорії в базі даних
+                if (_dbContext.Categories.Any(c => c.Name.ToLower() == categoryModel.Name.ToLower()))
+                {
+                    ViewData["ErrorMessage"] = $"Категорія {categoryModel.Name} вже існує";
+                    return View(categoryModel);
+                }
+
+                // Оновлюємо категорію в базі даних
+                var category = new Category(categoryModel);
                 try
                 {
-                    var category = _dbContext.Categories.Find(id);
-
-                    if (category == null)
-                    {
-                        return NotFound();
-                    }
-
-                    // Оновлення властивостей категорії
-                    category.Name = categoryViewModel.Name;
-                    // Інші поля оновлюємо за необхідності
-
-                    _dbContext.Update(category);
-                    _dbContext.SaveChanges();
+                    _dbContext.Categories.Update(category);
+                    await _dbContext.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    ModelState.AddModelError("", "Помилка при оновленні категорії. Будь ласка, спробуйте знову.");
-                    return View(categoryViewModel);
+                    if (!CategoryExists(category.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+
                 return RedirectToAction("Index");
             }
-            return View(categoryViewModel);
+
+            return View(categoryModel);
         }
 
-        public IActionResult DetailsCategory(int? id)
+        // GET: /Category/Delete/5
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
+            // Отримуємо категорію для видалення
             var category = _dbContext.Categories
-                .Include(c => c.Products)
-                .FirstOrDefault(c => c.Id == id);
+                .Include(с => с.Products)
+                .Include(c => c.ChildCategories)
+                .FirstOrDefault(с => с.Id == id);
 
             if (category == null)
             {
                 return NotFound();
             }
 
-            var categoryViewModel = new CategoryViewModel(category);
+            var categoryModel = new CategoryViewModel(category);
+            return View(categoryModel);
+        }
 
-            return View(categoryViewModel);
+        // POST: /Category/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            // Видаляємо категорію з бази даних
+            var category = _dbContext.Categories.FirstOrDefault(c => c.Id == id);
+            if (category != null)
+            {
+                _dbContext.Categories.Remove(category);
+                _dbContext.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
         }
 
         private bool CategoryExists(int id)
         {
-            return _dbContext.Categories.Any(c => c.Id == id);
+            return (_dbContext.Categories?.Any(item => item.Id == id)).GetValueOrDefault();
+        }
+
+        private Category? FindCategory(int id)
+        {
+            // Знаходимо категорію в базі даних за ідентифікатором
+            var category = _dbContext.Categories
+                .Include(c => c.ChildCategories)
+                .Include(c => c.Products)
+                .FirstOrDefault(c => c.Id == id);
+
+            return category;
+        }
+
+        // Перевірка унікальності назви категорії для валідації AJAX запитів
+        public IActionResult IsNameUnique(string name)
+        {
+            if (_dbContext.Categories.Any(c => c.Name.ToLower() == name.ToLower()))
+            {
+                return Json(false);
+            }
+            return Json(true);
         }
     }
 }

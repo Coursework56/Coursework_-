@@ -1,0 +1,32 @@
+﻿@using Coursework_.ViewModels
+@model CategoryViewModel
+
+<h2>Створити нову категорію</h2>
+@if (Model.ParentCategory != null)
+{
+    <h3>@($"Батьківська категорія - {Model.ParentCategory}")</h3>
+}
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                <h3 class="text-danger">@ViewData["ErrorMessage"]</h3>
+            }
+            <label asp-for="Name">Назва категорї</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <hr />
+        <button type="submit" class="btn btn-primary">Підтвердити</button>
+    </div>
+    <a asp-action="Index">Назад</a>
+</form>
+
+@section Scripts
+    {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+   }

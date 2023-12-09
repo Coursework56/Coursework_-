@@ -8,12 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\CategoryController.cs" />
     <Compile Remove="Controllers\ManufactureController.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Controllers\CategoryController.cs" />
     <None Include="Controllers\ManufactureController.cs" />
   </ItemGroup>
 

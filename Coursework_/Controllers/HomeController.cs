@@ -20,12 +20,22 @@ namespace Coursework_.Controllers
         public IActionResult Index()
         {
             var products = _dbContext.Products
-            .Include(p => p.Category)
-            .Include(p => p.Manufacturer)
-            .Select(p => new ProductViewModel(p))
-            .ToList();
+                .Include(p => p.Category)
+                .Include(p => p.Manufacturer)
+                .Select(p => new ProductViewModel
+                //Краще я тут зроблю перевірочку, щоб воно не того, все нормально функціонувало
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    PhotoPath = p.PhotoPath,
+                    CategoryId = p.CategoryId, 
+                    ManufacturerId = p.ManufacturerId 
+                })
+                .ToList();
 
-             return View(products);
+            return View(products);
         }
 
         public IActionResult Options()

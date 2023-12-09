@@ -1,0 +1,52 @@
+﻿﻿@using Coursework_.ViewModels
+@model ProductViewModel
+
+<h2>Details</h2>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Name
+        </dd>
+        <dt class="col-sm-2">
+            Price
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Price
+        </dd>
+        <dt class="col-sm-2">
+            Photo 
+        </dt>
+        <dd class="col-sm-10">
+            @Model.PhotoPath
+        </dd>
+        <dt class="col-sm-2">
+            Manufacturer
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Manufacturer
+        </dd>
+        <dt class="col-sm-2">
+            Category
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Category
+        </dd>
+        <dt class="col-sm-2">
+            Amount
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Amount
+        </dd>
+    </dl>
+    <div class="container">
+        <h3>Description</h3>
+        <p class="text-black">
+            @Model.Description
+        </p>
+    </div>
+    <a asp-action="Index">Back to list</a>
+</div>

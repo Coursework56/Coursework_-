@@ -1,22 +1,50 @@
-﻿using Coursework_.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
+using Coursework_.Data;
+using Coursework_.Models;
+using Coursework_.ViewModels;
 
 namespace Coursework_.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext dbContext)
         {
-            _logger = logger;
+            _dbContext = dbContext;
         }
 
         public IActionResult Index()
+{
+    var products = _dbContext.Products
+        .Include(p => p.Category)
+        .Include(p => p.Manufacturer)
+        .Select(p => new ProductViewModel(p))
+        .ToList();
+
+    return View(products);
+}
+
+        public IActionResult Options()
         {
             return View();
         }
+
+      [HttpGet]
+public IActionResult Search(string searchString)
+{
+    var products = _dbContext.Products
+        .Include(p => p.Category)
+        .Where(p => p.Name.Contains(searchString) || p.Name.Contains(searchString))
+        .ToList();
+
+    var productViewModels = products.Select(p => new ProductViewModel(p)).ToList();
+
+    return View("Index", productViewModels);
+}
 
         public IActionResult Privacy()
         {

@@ -18,32 +18,33 @@ namespace Coursework_.Controllers
         }
 
         public IActionResult Index()
-        {
-            var products = _dbContext.Products
-                .Include(p => p.Category)
-                .Include(p => p.Manufacturer)
-                .Select(p => new ProductViewModel(p, p.Category, p.Manufacturer))
-                .ToList();
+{
+    var products = _dbContext.Products
+        .Include(p => p.Category)
+        .Include(p => p.Manufacturer)
+        .Select(p => new ProductViewModel(p))
+        .ToList();
 
-            return View(products);
-        }
+    return View(products);
+}
 
         public IActionResult Options()
         {
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Search(string searchString)
-        {
-            var products = _dbContext.Products
-                .Include(p => p.Category)
-                .Where(p => p.Name.Contains(searchString) || p.Model.Contains(searchString))
-                .Select(p => new ProductViewModel(p, p.Category, p.Manufacturer))
-                .ToList();
+      [HttpGet]
+public IActionResult Search(string searchString)
+{
+    var products = _dbContext.Products
+        .Include(p => p.Category)
+        .Where(p => p.Name.Contains(searchString) || p.Model.Contains(searchString))
+        .ToList();
 
-            return View("Index", products);
-        }
+    var productViewModels = products.Select(p => new ProductViewModel(p)).ToList();
+
+    return View("Index", productViewModels);
+}
 
         public IActionResult Privacy()
         {

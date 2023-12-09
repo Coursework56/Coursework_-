@@ -1,48 +1,38 @@
+using Coursework_.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Coursework_.ViewModels;
+using Coursework_.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Coursework_.Data;
-using Coursework_.Models;
-using Coursework_.ViewModels;
 
 namespace Volt.Controllers
 {
-    public class ElectronicController : Controller
+    public class ProductController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public ElectronicController(ApplicationDbContext dbContext)
+        public ProductController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        // Метод Index змінено для використання ViewModel
         public IActionResult Index()
         {
-            var products = _dbContext.Products.ToList()
-                .Select(product => new ProductViewModel(product))
-                .ToList();
-
-            return View(products);
+            return View();
         }
 
-        // Метод CreateElectronic переписано для використання ViewModel
         [HttpGet]
-        public IActionResult CreateElectronic()
+        public IActionResult CreateProduct()
         {
-            var electronicClass = _dbContext.ElectronicClasses.ToList();
-            ViewBag.ElectronicClasses = new SelectList(electronicClass, "ElectronicClassId", "Name");
-
-            var company = _dbContext.Companies.ToList();
-            ViewBag.Companies = new SelectList(company, "CompanyId", "CompanyName");
-
+            PopulateDropdowns();
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreateElectronic(ProductViewModel productViewModel)
+        public IActionResult CreateProduct(ProductViewModel productViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -54,8 +44,7 @@ namespace Volt.Controllers
                     PhotoPath = productViewModel.PhotoPath,
                     Amount = productViewModel.Amount,
                     CategoryId = productViewModel.CategoryId,
-                    ManufacturerId = productViewModel.ManufacturerId,
-                    // інші властивості ініціалізуємо за потреби
+                    ManufacturerId = productViewModel.ManufacturerId
                 };
 
                 _dbContext.Products.Add(product);
@@ -68,97 +57,35 @@ namespace Volt.Controllers
             return View(productViewModel);
         }
 
-        // Інші методи контролера тут...
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult CheckProductName(string name, int categoryId)
+        {
+            var existingCategory = _dbContext.Categories
+                .Any(ec => ec.Name == name && ec.Id != categoryId);
+
+            return Json(!existingCategory);
+        }
 
         private void PopulateDropdowns()
         {
-            var electronicClass = _dbContext.ElectronicClasses.ToList();
-            ViewBag.ElectronicClasses = new SelectList(electronicClass, "ElectronicClassId", "Name");
+            var categories = _dbContext.Categories.ToList();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
 
-            var company = _dbContext.Companies.ToList();
-            ViewBag.Companies = new SelectList(company, "CompanyId", "CompanyName");
+            var manufacturers = _dbContext.Manufacturers.ToList();
+            ViewBag.Manufacturers = new SelectList(manufacturers, "Id", "Name");
         }
 
-        // Метод EditElectronic переписано для використання ViewModel
-        [HttpGet]
-        public IActionResult EditElectronic(int id)
-        {
-            var product = _dbContext.Products.FirstOrDefault(e => e.Id == id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            var productViewModel = new ProductViewModel(product);
-
-            PopulateDropdowns();
-
-            return View(productViewModel);
-        }
-
-        [HttpPost]
-        public IActionResult EditElectronic(int id, ProductViewModel updatedProductViewModel)
-        {
-            if (id != updatedProductViewModel.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var existingProduct = _dbContext.Products.FirstOrDefault(e => e.Id == id);
-
-                    if (existingProduct == null)
-                    {
-                        return NotFound();
-                    }
-
-                    // Оновлення властивостей товару
-                    existingProduct.Name = updatedProductViewModel.Name;
-                    existingProduct.Description = updatedProductViewModel.Description;
-                    existingProduct.Price = updatedProductViewModel.Price;
-                    existingProduct.PhotoPath = updatedProductViewModel.PhotoPath;
-                    existingProduct.Amount = updatedProductViewModel.Amount;
-                    existingProduct.CategoryId = updatedProductViewModel.CategoryId;
-                    existingProduct.ManufacturerId = updatedProductViewModel.ManufacturerId;
-                    // інші властивості оновлюємо за необхідності
-
-                    _dbContext.Update(existingProduct);
-                    _dbContext.SaveChanges();
-
-                    return RedirectToAction("Index", "Home");
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(updatedProductViewModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Помилка при оновленні товару. Будь ласка, спробуйте знову.");
-                        PopulateDropdowns();
-                        return View(updatedProductViewModel);
-                    }
-                }
-            }
-
-            PopulateDropdowns();
-            return View(updatedProductViewModel);
-        }
-
-        // Метод DetailsElectronic переписано для використання ViewModel
-        public IActionResult DetailsElectronic(int? id)
+        public IActionResult DetailsProduct(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = _dbContext.Products.FirstOrDefault(e => e.Id == id);
+            var product = _dbContext.Products
+                .Include(p => p.Category)
+                .Include(p => p.Manufacturer)
+                .FirstOrDefault(p => p.Id == id);
 
             if (product == null)
             {
@@ -166,15 +93,116 @@ namespace Volt.Controllers
             }
 
             var productViewModel = new ProductViewModel(product);
-
             return View(productViewModel);
         }
 
-        // Метод DeleteElectronic переписано для використання ViewModel
         [HttpGet]
-        public IActionResult DeleteElectronic(int id)
+        public IActionResult EditProduct(int id)
         {
-            var product = _dbContext.Products.FirstOrDefault(e => e.Id == id);
+            var product = _dbContext.Products.FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var productViewModel = new ProductViewModel(product);
+            PopulateDropdowns();
+            return View(productViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditProduct(ProductViewModel productViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var product = _dbContext.Products.FirstOrDefault(p => p.Id == productViewModel.Id);
+
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                product.Name = productViewModel.Name;
+                product.Description = productViewModel.Description;
+                product.Price = productViewModel.Price;
+                product.PhotoPath = productViewModel.PhotoPath;
+                product.Amount = productViewModel.Amount;
+                product.CategoryId = productViewModel.CategoryId;
+                product.ManufacturerId = productViewModel.ManufacturerId;
+
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            PopulateDropdowns();
+            return View(productViewModel);
+        }
+
+        private bool ProductExists(int id)
+        {
+            return _dbContext.Products.Any(p => p.Id == id);
+        }
+
+        public async Task<ActionResult> Buy(int? id)
+        {
+            if (!id.HasValue)
+            {
+                var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id.Value);
+
+                if (product != null)
+                {
+                    return NotFound();
+                }
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Buy(int productId)
+        {
+            var product = _dbContext.Products.FirstOrDefault(p => p.Id == productId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            if (product.Amount > 0)
+            { 
+                product.Amount -= 1;
+
+               
+                var purchase = new Purchase
+                {
+                    ProductId = product.Id,
+                    
+                };
+
+                _dbContext.Purchases.Add(purchase);
+                _dbContext.SaveChanges();
+
+               
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("ProductUnavailable", "Error");
+        }
+
+        [HttpGet]
+        public IActionResult DeleteProduct()
+        {
+            var products = _dbContext.Products.ToList();
+            return View(products);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteProduct(int id)
+        {
+            var product = _dbContext.Products.Find(id);
 
             if (product == null)
             {
@@ -185,40 +213,6 @@ namespace Volt.Controllers
             _dbContext.SaveChanges();
 
             return RedirectToAction("Index", "Home");
-        }
-
-        private bool ProductExists(int id)
-        {
-            return _dbContext.Products.Any(e => e.Id == id);
-        }
-
-        // Метод Buy переписано для використання ViewModel
-        [HttpGet]
-        public IActionResult Buy(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = _dbContext.Products.FirstOrDefault(e => e.Id == id.Value);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(new ProductViewModel(product));
-        }
-
-        [HttpPost]
-        public string Buy(Purchase purchase)
-        {
-            purchase.Date = DateTime.Now;
-            _dbContext.Purchases.Add(purchase);
-            _dbContext.SaveChanges();
-
-            return "Дякуємо, " + purchase.PurchaseName + ", за купівлю!";
         }
     }
 }

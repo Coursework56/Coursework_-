@@ -6,7 +6,7 @@ using Coursework_.Data;
 using Coursework_.Models;
 using Coursework_.ViewModels;
 
-namespace YourNamespace.Controllers
+namespace Coursework_.Controllers
 {
     public class HomeController : Controller
     {

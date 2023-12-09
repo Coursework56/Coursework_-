@@ -11,8 +11,8 @@ namespace Coursework_.ViewModels
 
         // Назва категорії з обов'язковими обмеженнями
         [Required]
-        [Remote("IsNameUnique", "Product", ErrorMessage = "This name is already in use")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Length must be more than 2 characters")]
+        [Remote("IsNameUnique", "Category", ErrorMessage = "Ця назва вже використовується")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Довжина має бути більше ніж 2 символи")]
         public string Name { get; set; }
 
         // Ідентифікатор батьківської категорії (якщо існує)

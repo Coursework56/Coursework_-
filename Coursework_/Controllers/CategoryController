@@ -1,0 +1,6 @@
+namespace Coursework_.Controllers
+{
+    public class CategoryController
+    {
+    }
+}

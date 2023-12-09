@@ -1,10 +1,12 @@
-﻿﻿@using Coursework_.ViewModels
+﻿@using Coursework_.ViewModels
 @model List<ProductViewModel>
 @{
     ViewData["Title"] = "Home Page";
 }
-<a asp-action="Create">Create a new device</a>
+
+<a asp-action="CreateProduct">Create a new device</a>
 <h2>Devices list</h2>
+
 <table class="table">
     <thead>
         <tr>
@@ -32,42 +34,50 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @if (Model != null)
         {
-            <tr>
-                <td>
-                    @item.Name
-                </td>
-                <td>
-                    @item.Price
-                </td>
-                <td>
-                    @item.PhotoPath
-                </td>
-                <td>
-                    <a asp-controller="Manufacturer" asp-action="Details" asp-route-id="@item.ManufacturerId">@item.Manufacturer</a>
-                </td>
-
-                <td>
-                    <a asp-controller="Category" asp-action="Details" asp-route-id="@item.CategoryId">@item.Category</a>
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                </td>
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Price
+                    </td>
+                    <td>
+                        @item.PhotoPath
+                    </td>
+                    <td>
+                        <a asp-controller="Manufacturer" asp-action="DetailsManufacturer" asp-route-id="@item.ManufacturerId">@item.Manufacturer</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Category" asp-action="Details" asp-route-id="@item.CategoryId">@item.Category</a>
+                    </td>
+                    <td>
+                        <a asp-action="EditProduct" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="DeleteProduct" asp-route-id="@item.Id">Delete</a> |
+                        <a asp-action="DetailsProduct" asp-route-id="@item.Id">Details</a>
+                    </td>
                     @if (item.Amount == 0)
                     {
-                    <td>
-                        <p class="text-danger">Sold out</p>
-                    </td>
+                        <td>
+                            <p class="text-danger">Sold out</p>
+                        </td>
                     }
                     else
                     {
-                    <td>
-                        <a asp-action="Buy" asp-route-id="@item.Id">Buy</a>
-                    </td>
+                        <td>
+                            <a asp-action="BuyProduct" asp-route-id="@item.Id">Buy</a>
+                        </td>
                     }
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7">No products available.</td>
             </tr>
         }
     </tbody>

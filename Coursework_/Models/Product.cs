@@ -47,7 +47,7 @@ namespace Coursework_.Models
             PhotoPath = productViewModel.PhotoPath;
             CategoryId = productViewModel.CategoryId;
             ManufacturerId = productViewModel.ManufacturerId;
-            Amount = productViewModel.Ammount;
+            Amount = productViewModel.Amount;
         }
     }
 }

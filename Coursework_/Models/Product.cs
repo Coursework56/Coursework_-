@@ -22,6 +22,9 @@ namespace Coursework_.Models
         // Ідентифікатор категорії товару
         public int CategoryId { get; set; }
 
+        // Кількість товару
+        public int Amount { get; set; }
+
         // Категорія товару (якщо існує)
         public Category? Category { get; set; }
 
@@ -44,6 +47,7 @@ namespace Coursework_.Models
             PhotoPath = productViewModel.PhotoPath;
             CategoryId = productViewModel.CategoryId;
             ManufacturerId = productViewModel.ManufacturerId;
+            Amount = productViewModel.Ammount;
         }
     }
 }

@@ -1,0 +1,38 @@
+﻿@using Coursework_.ViewModels
+
+@model List<CategoryViewModel>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<a asp-action="Create" class="btn btn-primary"> Create new</a>
+<h2>Seller list</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                More
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            @if (item.ParentCategoryId == null)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary">Delete</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">Show</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

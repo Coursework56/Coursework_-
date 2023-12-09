@@ -38,7 +38,7 @@ public IActionResult Search(string searchString)
 {
     var products = _dbContext.Products
         .Include(p => p.Category)
-        .Where(p => p.Name.Contains(searchString) || p.Model.Contains(searchString))
+        .Where(p => p.Name.Contains(searchString) || p.Name.Contains(searchString))
         .ToList();
 
     var productViewModels = products.Select(p => new ProductViewModel(p)).ToList();

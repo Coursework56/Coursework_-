@@ -177,7 +177,7 @@ namespace Volt.Controllers
                
                 var purchase = new Purchase
                 {
-                    ProductId = product.Id,
+                    Id = product.Id,
                     
                 };
 

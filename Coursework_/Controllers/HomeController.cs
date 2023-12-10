@@ -11,10 +11,12 @@ namespace Coursework_.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly ShopCart _cart;
 
-        public HomeController(ApplicationDbContext dbContext)
+        public HomeController(ApplicationDbContext dbContext, ShopCart cart)
         {
             _dbContext = dbContext;
+            _cart = cart;
         }
 
         public IActionResult Index()
@@ -23,7 +25,7 @@ namespace Coursework_.Controllers
                 .Include(p => p.Category)
                 .Include(p => p.Manufacturer)
                 .Select(p => new ProductViewModel
-                //Êðàùå ÿ òóò çðîáëþ ïåðåâ³ðî÷êó, ùîá âîíî íå òîãî, âñå íîðìàëüíî ôóíêö³îíóâàëî
+                //ÃŠÃ°Ã Ã¹Ã¥ Ã¿ Ã²Ã³Ã² Ã§Ã°Ã®Ã¡Ã«Ã¾ Ã¯Ã¥Ã°Ã¥Ã¢Â³Ã°Ã®Ã·ÃªÃ³, Ã¹Ã®Ã¡ Ã¢Ã®Ã­Ã® Ã­Ã¥ Ã²Ã®Ã£Ã®, Ã¢Ã±Ã¥ Ã­Ã®Ã°Ã¬Ã Ã«Ã¼Ã­Ã® Ã´Ã³Ã­ÃªÃ¶Â³Ã®Ã­Ã³Ã¢Ã Ã«Ã®
                 {
                     Id = p.Id,
                     Name = p.Name,
@@ -37,6 +39,29 @@ namespace Coursework_.Controllers
 
             return View(products);
         }
+
+public ViewResult ShopCart()
+ {
+     var items = _cart.GetShopItems();
+     _cart.listShopItems = items;
+
+     var obj = new ShopCartViewModel
+     {
+         shopCart = _cart
+     };
+
+     return View(obj);
+ }
+
+ public RedirectToActionResult AddToCart(int id)
+ {
+     var item = _dbContext.Products.FirstOrDefault(i => i.Id == id);
+     if (item != null) 
+     {
+         _cart.AddToCart(item);
+     }
+     return RedirectToAction("Index");
+ }
 
         public IActionResult Options()
         {

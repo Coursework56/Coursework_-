@@ -1,6 +1,7 @@
-using Coursework_.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Coursework_.Data;
+using Coursework_.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,17 +15,52 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped(sp => ShopCart.GetCart(sp));
+builder.Services.AddMvc();
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage();
+    app.UseStatusCodePages();
+    app.UseStaticFiles();
+    app.UseSession();
+
+    app.UseRouting();
+    app.UseAuthorization();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
+        endpoints.MapRazorPages();
+    });
 }
 else
 {
     app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+
+    app.UseRouting();
+    app.UseAuthorization();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
+        endpoints.MapRazorPages();
+    });
 }
+
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

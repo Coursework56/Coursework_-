@@ -32,23 +32,13 @@
 
         <div class="form-group">
             <label asp-for="ManufacturerId">Manufacturer</label>
-            <select asp-for="ManufacturerId" class="form-control">
-                @foreach (var man in ViewBag.Manufacturers)
-                {
-                    <option value="@man.Id">@man.Name</option>
-                }
-            </select>
+            <select asp-for="ManufacturerId" asp-items="@ViewBag.Manufacturers" class="form-control"></select>
             <span asp-validation-for="ManufacturerId" class="text-danger"></span>
         </div class="form-group">
 
         <div>
             <label asp-for="CategoryId">Category</label>
-            <select asp-for="CategoryId" class="form-control">
-                @foreach (var category in ViewBag.Categories)
-                {
-                    <option value="@category.Id">@category.Name</option>
-                }
-            </select>
+            <select asp-for="CategoryId" asp-items="@ViewBag.Categories" class="form-control"></select>
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
 

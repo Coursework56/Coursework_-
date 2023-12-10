@@ -21,7 +21,14 @@ namespace Volt.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var productsViews = _dbContext.Products
+                .Include(p=>p.Manufacturer)
+                .Include(p=>p.Category)
+                .Select(p=>new ProductViewModel(p))
+                .ToList();
+
+
+            return View(productsViews);
         }
 
         [HttpGet]

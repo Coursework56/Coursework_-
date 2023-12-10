@@ -27,7 +27,7 @@
 
     @if (Model.ProductsViews.Count > 0)
     {
-        <form method="post" asp-action="Delete">
+        <form method="post" asp-action="DeleteManufacturer">
             <input type="hidden" asp-for="Id" />
             <h3 class="text-danger">cannot delete a manufacturer, still has the goods</h3>
             <input type="submit" disabled value="Delete" class="btn btn-danger" />
@@ -37,7 +37,7 @@
     }
     else
     {
-        <form method="post" asp-action="Delete">
+        <form method="post" asp-action="DeleteManufacturer">
             <input type="hidden" asp-for="Id" />
             <input type="submit" value="Delete" class="btn btn-danger" />
             <br />

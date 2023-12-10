@@ -79,7 +79,7 @@ namespace Coursework_.Controllers
             }
 
             var manufacturer = _dbContext.Manufacturers
-                .Include(m => m.Electronics)
+                .Include(m => m.Products)
                 .FirstOrDefault(m => m.Id == id);
 
             if (manufacturer == null)

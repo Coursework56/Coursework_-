@@ -15,6 +15,7 @@ namespace Coursework_.Data
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<ShopItem> ShopItems {get; set;}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

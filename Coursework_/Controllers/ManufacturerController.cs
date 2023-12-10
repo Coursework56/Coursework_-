@@ -8,116 +8,116 @@ using Coursework_.ViewModels;
 
 namespace Coursework_.Controllers
 {
-    public class ManufactureController : Controller
+    public class ManufacturerController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public ManufactureController(ApplicationDbContext dbContext)
+        public ManufacturerController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         public IActionResult Index()
         {
-            var manufactures = _dbContext.Manufacturers
+            var manufacturers = _dbContext.Manufacturers
                 .Select(m => new ManufacturerViewModel(m))
                 .ToList();
 
-            return View(manufactures);
+            return View(manufacturers);
         }
 
         [HttpGet]
-        public IActionResult CreateManufacture()
+        public IActionResult CreateManufacturer()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreateManufacture(Manufacture manufacture)
+        public IActionResult CreateManufacturer(Manufacturer manufacturer)
         {
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrEmpty(manufacture.Name))
+                if (string.IsNullOrEmpty(manufacturer.Name))
                 {
-                    ModelState.AddModelError("Name", "Поле 'Manufacture Name' є обов'язковим.");
-                    return View(manufacture);
+                    ModelState.AddModelError("Name", "Поле 'Manufacturer Name' є обов'язковим.");
+                    return View(manufacturer);
                 }
 
-                var existingManufacture = _dbContext.Manufacturers.Any(m => m.Name == manufacture.Name);
-                if (existingManufacture)
+                var existingManufacturer = _dbContext.Manufacturers.Any(m => m.Name == manufacturer.Name);
+                if (existingManufacturer)
                 {
                     ModelState.AddModelError("Name", "Така назва виробника вже існує.");
-                    return View(manufacture);
+                    return View(manufacturer);
                 }
 
-                if (manufacture != null)
+                if (manufacturer != null)
                 {
-                    _dbContext.Manufacturers.Add(manufacture);
+                    _dbContext.Manufacturers.Add(manufacturer);
                     _dbContext.SaveChanges();
                 }
 
                 return RedirectToAction("Index", "Home");
             }
 
-            return View(manufacture);
+            return View(manufacturer);
         }
 
         [AcceptVerbs("Get", "Post")]
-        public IActionResult CheckManufactureName(string name, int manufactureId)
+        public IActionResult CheckManufacturerName(string name, int id)
         {
-            var existingManufacture = _dbContext.Manufacturers
-                .Any(m => m.Name == name && m.ManufactureId != manufactureId);
+            var existingManufacturer = _dbContext.Manufacturers
+                .Any(m => m.Name == name && m.Id != id);
 
-            return Json(!existingManufacture);
+            return Json(!existingManufacturer);
         }
 
-        public IActionResult DetailsManufacture(int? id)
+        public IActionResult DetailsManufacturer(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var manufacture = _dbContext.Manufacturers
+            var manufacturer = _dbContext.Manufacturers
                 .Include(m => m.Electronics)
-                .FirstOrDefault(m => m.ManufactureId == id);
+                .FirstOrDefault(m => m.Id == id);
 
-            if (manufacture == null)
+            if (manufacturer == null)
             {
                 return NotFound();
             }
 
-            var manufactureViewModel = new ManufacturerViewModel(manufacture);
+            var manufacturerViewModel = new ManufacturerViewModel(manufacturer);
 
-            return View(manufactureViewModel);
+            return View(manufacturerViewModel);
         }
 
-        public IActionResult EditManufacture(int? id)
+        public IActionResult EditManufacturer(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var manufacture = _dbContext.Manufacturers.Find(id);
+            var manufacturer = _dbContext.Manufacturers.Find(id);
 
-            if (manufacture == null)
+            if (manufacturer == null)
             {
                 return NotFound();
             }
 
-            return View(manufacture);
+            return View(manufacturer);
         }
 
-        private bool ManufactureExists(int id)
+        private bool ManufacturerExists(int id)
         {
-            return _dbContext.Manufacturers.Any(m => m.ManufactureId == id);
+            return _dbContext.Manufacturers.Any(m => m.Id == id);
         }
 
         [HttpPost]
-        public IActionResult EditManufacture(int id, Manufacture manufacture)
+        public IActionResult EditManufacturer(int id, Manufacturer manufacturer)
         {
-            if (id != manufacture.ManufactureId)
+            if (id != manufacturer.Id)
             {
                 return NotFound();
             }
@@ -126,24 +126,24 @@ namespace Coursework_.Controllers
             {
                 try
                 {
-                    _dbContext.Update(manufacture);
+                    _dbContext.Update(manufacturer);
                     _dbContext.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ManufactureExists(manufacture.ManufactureId))
+                    if (!ManufacturerExists(manufacturer.Id))
                     {
                         return NotFound();
                     }
                     else
                     {
                         ModelState.AddModelError("", "Помилка при оновленні виробника. Будь ласка, спробуйте знову.");
-                        return View(manufacture);
+                        return View(manufacturer);
                     }
                 }
                 return RedirectToAction("Index", "Home");
             }
-            return View(manufacture);
+            return View(manufacturer);
         }
     }
 }

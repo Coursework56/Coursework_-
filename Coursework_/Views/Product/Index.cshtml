@@ -46,7 +46,9 @@
                         @item.Price
                     </td>
                     <td>
-                        @item.PhotoPath
+                        <div style="width: 350px; height: 200px; overflow: hidden;">
+                            <img style="width: auto; height: 100%;" src="@item.PhotoPath" alt="Фото електроніки" />
+                        </div>
                     </td>
                     <td>
                         <a asp-controller="Manufacturer" asp-action="DetailsManufacturer" asp-route-id="@item.ManufacturerId">@item.Manufacturer</a>

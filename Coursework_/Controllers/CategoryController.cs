@@ -53,6 +53,15 @@ namespace Coursework_.Controllers
             return View(categoryViewModel);
         }
 
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult CheckCategory(string name, int categoryId)
+        {
+            var existingCategories = _dbContext.Categories
+                .Any(ec => ec.Name == name && ec.Id != categoryId);
+
+            return Json(!existingCategories);
+        }
+
         [HttpGet]
         public IActionResult EditCategory(int? id)
         {

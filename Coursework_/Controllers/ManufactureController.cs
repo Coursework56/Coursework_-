@@ -8,7 +8,7 @@ using Coursework_.ViewModels;
 
 namespace Coursework_.Controllers
 {
-    public class ManufactureController : Controller
+    public class ManufacturerController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -27,13 +27,13 @@ namespace Coursework_.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateManufacture()
+        public IActionResult CreateManufacturer()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreateManufacture(Manufacture manufacture)
+        public IActionResult CreateManufacture(Manufacturer manufacture)
         {
             if (ModelState.IsValid)
             {
@@ -63,10 +63,19 @@ namespace Coursework_.Controllers
         }
 
         [AcceptVerbs("Get", "Post")]
-        public IActionResult CheckManufactureName(string name, int manufactureId)
+        public IActionResult CheckManufacture(string name, int manufactureId)
         {
             var existingManufacture = _dbContext.Manufacturers
-                .Any(m => m.Name == name && m.ManufactureId != manufactureId);
+                .Any(ec => ec.Name == name && ec.Id != manufactureId);
+
+            return Json(!existingManufacture);
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult CheckManufacturerName(string name, int manufactureId)
+        {
+            var existingManufacture = _dbContext.Manufacturers
+                .Any(m => m.Name == name && m.Id != manufactureId);
 
             return Json(!existingManufacture);
         }
@@ -80,7 +89,7 @@ namespace Coursework_.Controllers
 
             var manufacture = _dbContext.Manufacturers
                 .Include(m => m.Electronics)
-                .FirstOrDefault(m => m.ManufactureId == id);
+                .FirstOrDefault(m => m.Id == id);
 
             if (manufacture == null)
             {
@@ -111,13 +120,13 @@ namespace Coursework_.Controllers
 
         private bool ManufactureExists(int id)
         {
-            return _dbContext.Manufacturers.Any(m => m.ManufactureId == id);
+            return _dbContext.Manufacturers.Any(m => m.Id == id);
         }
 
         [HttpPost]
-        public IActionResult EditManufacture(int id, Manufacture manufacture)
+        public IActionResult EditManufacture(int id, Manufacturer manufacture)
         {
-            if (id != manufacture.ManufactureId)
+            if (id != manufacture.Id)
             {
                 return NotFound();
             }

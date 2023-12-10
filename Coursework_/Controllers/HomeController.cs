@@ -44,7 +44,7 @@ namespace Coursework_.Controllers
             //commit
         }
 
-      [HttpGet]
+    [HttpGet]
     public IActionResult Search(string searchString)
     {
         var products = _dbContext.Products

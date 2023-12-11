@@ -13,7 +13,7 @@ namespace Coursework_.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly ShopCart _cart;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
+        //v
         public HomeController(ApplicationDbContext dbContext, ShopCart cart, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;

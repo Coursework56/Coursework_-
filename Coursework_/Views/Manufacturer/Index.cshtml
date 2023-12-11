@@ -1,21 +1,23 @@
 ﻿﻿@using Coursework_.ViewModels
 @model List<ManufacturerViewModel>
 
-<a asp-action="CreateManufacturer">Create new</a>
+
 <h2>Список виробників</h2>
-<table class="table">
+<a asp-action="CreateManufacturer" class="btn btn-outline-secondary">Додати новий</a>
+
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>
+            <th class="table-dark text-white">
                 Назва
             </th>
-            <th>
+            <th class="table-dark text-white">
                 Опис
             </th>
-            <th>
+            <th class="table-dark text-white">
                 Країна
             </th>
-            <th>
+            <th class="table-dark text-white">
                 Додатково
             </th>
         </tr>
@@ -24,19 +26,19 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <th>
                     @item.Name
-                </td>
+                </th>
                 <td>
                     @item.Description
                 </td>
-                <td>
+                <td class="text-center">
                     @item.Country
                 </td>
                 <td>
-                    <a asp-action="EditManufacturer" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="DeleteManufacturer" asp-route-id="@item.Id">Delete</a> |
-                    <a asp-action="DetailsManufacturer" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="EditManufacturer" asp-route-id="@item.Id" class="btn btn-outline-warning">Редагувати</a>
+                    <a asp-action="DeleteManufacturer" asp-route-id="@item.Id" class="btn btn-outline-danger">Видалити</a>
+                    <a asp-action="DetailsManufacturer" asp-route-id="@item.Id" class="btn btn-outline-info">Деталі</a>
                 </td>
             </tr>
         }

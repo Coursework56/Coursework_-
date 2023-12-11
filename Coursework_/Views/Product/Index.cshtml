@@ -4,31 +4,32 @@
     ViewData["Title"] = "Home Page";
 }
 
-<a asp-action="CreateProduct">Створити новий товар</a>
 <h2>Спиок товарів</h2>
+<a asp-action="CreateProduct" class="btn btn-outline-secondary">Створити новий товар</a>
 
-<table class="table">
+
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>
+            <th class="table-dark text-white">
                 Назва
             </th>
-            <th>
+            <th class="table-dark text-white">
                 Ціна
             </th>
-            <th>
+            <th class="table-dark text-white">
                 Фотог
             </th>
-            <th>
+            <th class="table-dark text-white">
                 Виробник
             </th>
-            <th>
+            <th class="table-dark text-white">
                 Категорія
             </th>
-            <th>
+            <th class="table-dark text-white">
                 Додатково
             </th>
-            <th>
+            <th class="table-dark text-white">
                 Купити
             </th>
         </tr>
@@ -39,10 +40,10 @@
             foreach (var item in Model)
             {
                 <tr>
-                    <td>
+                    <th>
                         @item.Name
-                    </td>
-                    <td>
+                    </th>
+                    <td class="text-center">
                         @item.Price
                     </td>
                     <td>
@@ -51,26 +52,26 @@
                         </div>
                     </td>
                     <td>
-                        <a asp-controller="Manufacturer" asp-action="DetailsManufacturer" asp-route-id="@item.ManufacturerId">@item.Manufacturer</a>
+                        <a asp-controller="Manufacturer" asp-action="DetailsManufacturer" asp-route-id="@item.ManufacturerId" class="btn btn-light">@item.Manufacturer</a>
                     </td>
                     <td>
-                        <a asp-controller="Category" asp-action="Details" asp-route-id="@item.CategoryId">@item.Category</a>
+                        <a asp-controller="Category" asp-action="Details" asp-route-id="@item.CategoryId" class="btn btn-light">@item.Category</a>
                     </td>
                     <td>
-                        <a asp-action="EditProduct" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="DeleteProduct" asp-route-id="@item.Id">Delete</a> |
-                        <a asp-action="DetailsProduct" asp-route-id="@item.Id">Details</a>
+                        <a asp-action="EditProduct" asp-route-id="@item.Id" class="btn btn-outline-warning">Редагувати</a>
+                        <a asp-action="DeleteProduct" asp-route-id="@item.Id" class="btn btn-outline-danger">Видалити</a>
+                        <a asp-action="DetailsProduct" asp-route-id="@item.Id" class="btn btn-outline-info">Деталі</a>
                     </td>
                     @if (item.Amount == 0)
                     {
                         <td>
-                            <p class="text-danger">Sold out</p>
+                            <p class="text-danger">Немає в наявності</p>
                         </td>
                     }
                     else
                     {
                         <td>
-                            <a asp-action="BuyProduct" asp-route-id="@item.Id">Купити</a>
+                            <a asp-action="BuyProduct" asp-route-id="@item.Id" class="btn btn-outline-success btn-lg">Купити</a>
                         </td>
                     }
                 </tr>
@@ -79,7 +80,7 @@
         else
         {
             <tr>
-                <td colspan="7">No products available.</td>
+                <td colspan="7">Немає доступного товару</td>
             </tr>
         }
     </tbody>

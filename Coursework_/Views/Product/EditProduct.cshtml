@@ -1,7 +1,7 @@
 ﻿﻿@using Coursework_.ViewModels
 @model ProductViewModel
 
-<h2>@("Edit a "+ Model.Name )</h2>
+<h2>@("Редагувати "+ Model.Name )</h2>
 
 <form method="post">
     <div class="border p-3 mt-4">
@@ -12,45 +12,45 @@
                 <h4 class="text-danger">@ViewData["ErrorMessage"]</h4>
             }
         <div class="form-group">
-            <label asp-for="Name">Name</label>
+            <label asp-for="Name" class="m-1 p-1">Name</label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Price">Price</label>
+            <label asp-for="Price" class="m-1 p-1">Price</label>
             <input asp-for="Price" class="form-control" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="PhotoPath">Photo Path</label>
+            <label asp-for="PhotoPath" class="m-1 p-1">Photo Path</label>
             <input asp-for="PhotoPath" class="form-control" />
             <span asp-validation-for="PhotoPath" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="ManufacturerId">Manufacturer</label>
+            <label asp-for="ManufacturerId" class="m-1 p-1">Manufacturer</label>
             <select asp-for="ManufacturerId" asp-items="@ViewBag.Manufacturers" class="form-control"></select>
             <span asp-validation-for="ManufacturerId" class="text-danger"></span>
         </div class="form-group">
 
         <div>
-            <label asp-for="CategoryId">Category</label>
+            <label asp-for="CategoryId" class="m-1 p-1">Category</label>
             <select asp-for="CategoryId" asp-items="@ViewBag.Categories" class="form-control"> </select>
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Description">Description</label>
+            <label asp-for="Description" class="m-1 p-1">Description</label>
             <textarea asp-for="Description" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Amount">Amount</label>
+            <label asp-for="Amount" class="m-1 p-1">Amount</label>
             <input asp-for="Amount" class="form-control" />
             <span asp-validation-for="Amount" class="text-danger"></span>
         </div>
     </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    <a asp-action="Index">Back to list</a>
+        <button type="submit" class="btn btn-outline-success">Підтвердити</button>
+    <a asp-action="Index" class="btn btn-outline-dark">Назад</a>
 </form>
 
 @section Scripts

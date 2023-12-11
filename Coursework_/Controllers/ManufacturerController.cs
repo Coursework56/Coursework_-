@@ -106,9 +106,61 @@ namespace Coursework_.Controllers
                 return NotFound();
             }
 
-            return View(manufacturer);
+            var viewModel = new ManufacturerViewModel
+            {
+                Id = manufacturer.Id,
+                Name = manufacturer.Name,
+                Country = manufacturer.Country,
+                Description = manufacturer.Description
+            };
+
+            return View(viewModel);
+        }
+        [HttpGet]
+        public IActionResult DeleteManufacturer(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var manufacturer = _dbContext.Manufacturers
+                .FirstOrDefault(m => m.Id == id);
+
+            if (manufacturer == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new ManufacturerViewModel(manufacturer);
+
+            return View(viewModel);
         }
 
+        [HttpPost, ActionName("DeleteManufacturer")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteManufacturerConfirmed(int id)
+        {
+            var manufacturer = _dbContext.Manufacturers
+                .Include(m => m.Products)
+                .FirstOrDefault(m => m.Id == id);
+
+            if (manufacturer == null)
+            {
+                return NotFound();
+            }
+
+            if (manufacturer.Products.Count > 0)
+            {
+                // Manufacturer has associated products, don't delete
+                return RedirectToAction("DetailsManufacturer", new { id = manufacturer.Id });
+            }
+
+            _dbContext.Manufacturers.Remove(manufacturer);
+            _dbContext.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
+        }
         private bool ManufacturerExists(int id)
         {
             return _dbContext.Manufacturers.Any(m => m.Id == id);

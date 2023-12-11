@@ -1,16 +1,46 @@
-﻿@{
+﻿@using Coursework_.ViewModels
+@model List<ProductViewModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome </h1>
-    <h1>Коміт тест</h1>
-<h1>I love fart</h1>
-<h1>Volodymyr Mulyko</h1>
-<h2>Anton Bessaraпрлплb</h2>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p><mark style="background-color:red">K</mark><mark style="background-color:orange">o</mark><mark style="background-color:yellow">м</mark><mark style="background-color:green">і</mark><mark style="background-color:blue">т</mark><mark style="background-color:purple">т</mark></p>
+<div>
+    <h2>Products</h2>
+    <p>
+        @using (Html.BeginForm("Search", "Home", FormMethod.Get))
+        {
+            <input type="text" name="searchString" placeholder="Search by techniques name" />
+            <input type="submit" value="Search" />
+        }
+    </p>
+
+    @if (Model.Count > 0)
+    {
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                        <img style="width: auto; height: 100%;" src="@product.PhotoPath" alt="Фото електроніки" />
+                        <div class="card-body">
+                            <h4 class="card-title">@product.Name</h4>
+                            <p class="card-text">@product.Description</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a asp-controller="Home" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-sm btn-outline-secondary">Add to Cart</a>
+                                </div>
+                                <small class="text-muted">$@product.Price</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No products available.</p>
+    }
+
 </div>
-
-
-<h1>Kryzhyk</h1>

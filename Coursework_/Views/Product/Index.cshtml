@@ -4,32 +4,32 @@
     ViewData["Title"] = "Home Page";
 }
 
-<a asp-action="CreateProduct">Create a new device</a>
-<h2>Devices list</h2>
+<a asp-action="CreateProduct">Створити новий товар</a>
+<h2>Спиок товарів</h2>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                Name
+                Назва
             </th>
             <th>
-                Price
+                Ціна
             </th>
             <th>
-                Photo Path
+                Фотог
             </th>
             <th>
-                Manufacturer
+                Виробник
             </th>
             <th>
-                Category
+                Категорія
             </th>
             <th>
-                More
+                Додатково
             </th>
             <th>
-                Buy
+                Купити
             </th>
         </tr>
     </thead>
@@ -70,7 +70,7 @@
                     else
                     {
                         <td>
-                            <a asp-action="BuyProduct" asp-route-id="@item.Id">Buy</a>
+                            <a asp-action="BuyProduct" asp-route-id="@item.Id">Купити</a>
                         </td>
                     }
                 </tr>

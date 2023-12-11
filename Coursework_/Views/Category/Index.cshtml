@@ -4,15 +4,17 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-<a asp-action="Create" class="btn btn-primary">Створити нову</a>
+
 <h2>Категорії</h2>
-<table class="table">
+<a asp-action="Create" class="btn btn-outline-secondary p-2"><i class="bi bi-plus-circle"></i> Додати категорію</a>
+
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>
+            <th class="table-dark text-white">
                 Назва
             </th>
-            <th>
+            <th class="table-dark text-white">
                 Більше
             </th>
 
@@ -28,10 +30,10 @@
                         @item.Name
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Редагувати</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary">Видалити</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary">Деталі</a> |
-                        <a asp-action="Create" asp-route-parentCategoryId="@item.Id" class="btn btn-outline-primary">Створити дочірню катогрію</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">Редагувати</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Видалити</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">Деталі</a>
+                        <a asp-action="Create" asp-route-parentCategoryId="@item.Id" class="btn btn-outline-secondary">Створити  підкатегорію</a>
                     </td>
                 </tr>
             }

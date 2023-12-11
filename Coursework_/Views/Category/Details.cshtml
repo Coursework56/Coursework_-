@@ -1,7 +1,7 @@
 ﻿@using Coursework_.ViewModels
 @model CategoryViewModel
 
-<h2>Details</h2>
+<h2>Деталі</h2>
 <div>
     <h3>@Model.Name</h3>
     @if (Model.ProductsViews == null)
@@ -23,26 +23,26 @@
     }
     @if (ViewBag.Products == null)
     {
-        <h3 class="text-info">Поки немає товарів цієї категорії</h3>
+        <h3 class="text-secondary">Поки немає товарів цієї категорії</h3>
     }
     else
     {
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>
+                    <th class="table-dark text-white">
                         Назва
                     </th>
-                    <th>
+                    <th class="table-dark text-white">
                         Ціна
                     </th>
-                    <th>
+                    <th class="table-dark text-white">
                         Виробник
                     </th>
-                    <th>
+                    <th class="table-dark text-white">
                         Категорія
                     </th>
-                    <th>
+                    <th class="table-dark text-white">
                         Опис
                     </th>
                 </tr>
@@ -73,6 +73,6 @@
     }
 </div>
 <div>
-    <a asp-controller="Category" asp-action="Index">Назад</a>
+    <a asp-controller="Category" asp-action="Index" class="btn btn-outline-dark">Назад</a>
 </div>
 

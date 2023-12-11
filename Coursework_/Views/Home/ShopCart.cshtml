@@ -9,14 +9,14 @@
     {
         @foreach (var el in Model.shopCart.listShopItems)
         {
-            <div class="alert alert-warning mt-3">
+            <div class="alert alert-success mt-3">
                 <b>Ґаджет: </b>@el.product.Name<br />
                 <b>Ціна: </b>@el.product.Price.ToString("c");
             </div>
         }
         <hr />
         <form asp-action="Buy" asp-controller="Home" method="get">
-            <button type="submit" class="btn btn-primary">Підтвердити покупку</button>
+            <button type="submit" class="btn btn-outline-success">Підтвердити покупку</button>
         </form>
     }
 </div>

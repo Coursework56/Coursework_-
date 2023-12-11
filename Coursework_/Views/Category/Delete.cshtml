@@ -7,19 +7,24 @@
     {
         <form method="post" asp-action="Delete">
             <input type="hidden" asp-for="Id" />
-            <h3 class="text-danger">Не можна видалити категорію якщо є товар цієї категорії, або вона має підкатегорію</h3>
-            <input type="submit" disabled value="Видалити" class="btn btn-danger" />
+                <div class="card border-danger mb-3">
+                    <div class="card-header border-bottom bottom-danger">Помилка</div>
+                    <div class="card-body">
+                        <h3 class="card-title text-danger">Не можна видалити категорію якщо є товар цієї категорії, або вона має підкатегорію</h3>
+                    </div>
+                    <input type="submit" disabled value="Видалити" class="btn btn-danger" />
+                </div>
             <br />
-            <a asp-action="Index">Назад</a>
+            <a asp-action="Index" class="btn btn-outline-dark p-2">Назад</a>
         </form>
     }
     else
     {
         <form method="post" asp-action="Delete">
             <input type="hidden" asp-for="Id" />
-            <input type="submit" value="Видалити" class="btn btn-danger" />
+            <input type="submit" value="Видалити" class="btn btn-danger p-2" />
             <br />
-            <a asp-action="Index">Назад</a>
+            <a asp-action="Index" class="btn btn-outline-dark p-2">Назад</a>
         </form>
     }
 
@@ -34,7 +39,7 @@
                         @subCategory.Name
                     </dt>
                     <dd>
-                        <a asp-action="Delete" asp-route-id="@subCategory.Id" class="btn btn-outline-danger">Видалити</a>
+                        <a asp-action="Delete" asp-route-id="@subCategory.Id" class="btn btn-outline-danger p-2">Видалити</a>
                     </dd>
                 }
             </dl>

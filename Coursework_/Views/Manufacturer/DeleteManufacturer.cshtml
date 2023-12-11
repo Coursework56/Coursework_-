@@ -23,24 +23,25 @@
         <dd class="col-sm-10">
             @Model.Description
         </dd>
-        @if (Model.ProductsViews != null && Model.ProductsViews.Count > 0)
-        {
-            <form method="post" asp-action="DeleteManufacturer">
-                <input type="hidden" asp-for="Id" />
-                <h3 class="text-danger">Не можна видалити виробника - є пов'язані товари</h3>
-                <input type="submit" disabled value="Delete" class="btn btn-danger" />
-                <br />
-                <a asp-action="Index">Повернутись на головну</a>
-            </form>
-        }
-        else
-        {
-            <form method="post" asp-action="DeleteManufacturer">
-                <input type="hidden" asp-for="Id" />
-                <input type="submit" value="Delete" class="btn btn-danger" />
-                <br />
-                <a asp-action="Index">Повернутись на головну</a>
-            </form>
-        }
     </dl>
+
+    @if (Model.ProductsViews.Count > 0)
+    {
+        <form method="post" asp-action="DeleteManufacturer">
+            <input type="hidden" asp-for="Id" />
+            <h3 class="text-danger">Не можна видалити виробника - є пов'язані товари</h3>
+            <input type="submit" disabled value="Delete" class="btn btn-danger" />
+            <br />
+            <a asp-action="Index" class="btn btn-outline-dark">Повернутись на головну</a>
+        </form>
+    }
+    else
+    {
+        <form method="post" asp-action="DeleteManufacturer">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            <br />
+            <a asp-action="Index" class="btn btn-outline-dark p-2">Повернутись на головну</a>
+        </form>
+    }
 </div>

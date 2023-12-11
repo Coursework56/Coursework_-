@@ -6,12 +6,12 @@
 }
 
 <div>
-    <h2>Products</h2>
+    <h2>Товари</h2>
     <p>
         @using (Html.BeginForm("Search", "Home", FormMethod.Get))
         {
-            <input type="text" name="searchString" placeholder="Search by techniques name" />
-            <input type="submit" value="Search" />
+            <input type="text" class="border border-secondary text-secondary" name="searchString" placeholder="Пошук по назві товару" />
+            <input type="submit" class="btn btn-sm btn-outline-dark"  value="Пошук" />
         }
     </p>
 
@@ -28,7 +28,7 @@
                             <p class="card-text">@product.Description</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <a asp-controller="Home" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-sm btn-outline-secondary">Add to Cart</a>
+                                    <a asp-controller="Home" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-sm btn-outline-success">Додати до корзини</a>
                                 </div>
                                 <small class="text-muted">$@product.Price</small>
                             </div>
@@ -40,7 +40,7 @@
     }
     else
     {
-        <p>No products available.</p>
+        <p>Немає доступного товару</p>
     }
 
 </div>

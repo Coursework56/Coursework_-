@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Опції</title>
+</head>
+<body>
+    <h2>Опції</h2>
+    <div>
+        <div>
+            <h4 class="p-2"><i class="bi bi-laptop"></i> Товар</h4>
+            <form asp-action="Index" asp-controller="ProductController">
+                <a href="/Product/Index" class="btn btn-outline-dark">Товар</a>
+            </form>
+        </div>
+        <div>
+            <h4 class="p-2"><i class="bi bi-clipboard2"></i> Категорії</h4>
+            <form asp-action="Index" asp-controller="CategoryController">
+                <a href="/Category/Index" class="btn btn-outline-dark">Категорії</a>
+            </form>
+        </div>
+        <div>
+            <h4 class="p-2"><i class="bi bi-building"></i> Виробники</h4>
+            <form asp-action="Index" asp-controller="ManufacturerController" >
+               <a href="/Manufacturer/Index" class="btn btn-outline-dark">Виробник</a>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>

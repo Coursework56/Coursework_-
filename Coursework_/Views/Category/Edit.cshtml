@@ -1,7 +1,7 @@
 ﻿@using Coursework_.ViewModels
 @model CategoryViewModel
 
-<h2>@("Редагувати категрію: " + Model.Name)</h2>
+<h2>@("Редагувати категорію: " + Model.Name)</h2>
 <form method="post">
     <div class="border p-3 mt-4">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -11,12 +11,11 @@
             {
                 <h3 class="text-danger">@ViewData["ErrorMessage"]</h3>
             }
-            <label asp-for="Name">Назва</label>
+            <label asp-for="Name" class="m-1 p-1">Назва</label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-        <hr />
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-outline-success">Підтвердити</button>
     </div>
     @if (Model.ChildCategories != null)
     {
@@ -31,7 +30,7 @@
             </ul>
         </div>
     }
-    <a asp-action="Index">Назад</a>
+    <a asp-action="Index" class="btn btn-outline-dark">Назад</a>
 </form>
 
 @section Scripts

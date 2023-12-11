@@ -1,52 +1,52 @@
 ﻿﻿@using Coursework_.ViewModels
 @model ProductViewModel
 
-<h2>Details</h2>
+<h2>Деталі</h2>
 <div>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 bg-secondary text-white">
             Назва
         </dt>
         <dd class="col-sm-10">
             @Model.Name
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 bg-secondary text-white">
             Ціна
         </dt>
         <dd class="col-sm-10">
             @Model.Price
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 bg-secondary text-white">
             Фото
         </dt>
         <dd class="col-sm-10">
             @Model.PhotoPath
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 bg-secondary text-white">
             Виробник
         </dt>
         <dd class="col-sm-10">
             @Model.Manufacturer
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 bg-secondary text-white">
             Категорія
         </dt>
         <dd class="col-sm-10">
             @Model.Category
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2 bg-secondary text-white">
             Кількість
         </dt>
         <dd class="col-sm-10">
             @Model.Amount
         </dd>
     </dl>
-    <div class="container">
-        <h3>Опис</h3>
-        <p class="text-black">
+    <div class="card border-dark mb-3">
+        <h3 class="card-header bg-transparent border-dark">Опис</h3>
+        <p class="card-text text-black m-3 p-3">
             @Model.Description
         </p>
     </div>
-    <a asp-action="Index">Back to list</a>
+    <a asp-action="Index" class="btn btn-outline-dark">Back to list</a>
 </div>

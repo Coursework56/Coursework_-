@@ -11,23 +11,23 @@
         }
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Name">Назва</label>
+            <label asp-for="Name" class="m-1 p-1">Назва</label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Country">Країна</label>
+            <label asp-for="Country" class="m-1 p-1">Країна</label>
             <input asp-for="Country" class="form-control" />
             <span asp-validation-for="Country" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Description">Опис</label>
+            <label asp-for="Description" class="m-1 p-1">Опис</label>
             <textarea asp-for="Description" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary">Підтвердити</button>
+        <button type="submit" class="btn btn-outline-success">Підтвердити</button>
     </div>
-    <a asp-action="Index">Повернутися на головну</a>
+    <a asp-action="Index" class="btn btn-outline-dark">Повернутися на головну</a>
 </form>
 
 @section Scripts

@@ -14,14 +14,13 @@
             {
                 <h3 class="text-danger">@ViewData["ErrorMessage"]</h3>
             }
-            <label asp-for="Name">Назва категорї</label>
+            <label asp-for="Name" class="m-1 p-1">Назва категорії</label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-        <hr />
-        <button type="submit" class="btn btn-primary">Підтвердити</button>
+        <button type="submit" class="btn btn-outline-success">Підтвердити</button>
     </div>
-    <a asp-action="Index">Назад</a>
+    <a asp-action="Index" class="btn btn-outline-dark">Назад</a>
 </form>
 
 @section Scripts

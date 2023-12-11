@@ -40,18 +40,22 @@ namespace Coursework_.Controllers
 
             var categoryView = new CategoryViewModel(category);
 
-            var productViews = new List<ProductViewModel>();
+            var products = new List<Product>();
 
-            // Додаємо товари поточної категорії до списку productViews
+            // Додаємо товари поточної категорії до списку products
             if (categoryView.ProductsViews != null)
             {
                 foreach (var productView in categoryView.ProductsViews)
                 {
-                    productViews.Add(productView);
+                    var product = _dbContext.Products
+                        .Include(d=>d.Manufacturer)
+                        .FirstOrDefault(c => c.Id == productView.Id);
+                    products.Add(product);
+
                 }
             }
 
-            // Додаємо товари з усіх дочірніх категорій до списку productViews
+            // Додаємо товари з усіх дочірніх категорій до списку products
             if (categoryView.ChildCategories != null)
             {
                 foreach (var childCategory in categoryView.ChildCategories)
@@ -59,18 +63,22 @@ namespace Coursework_.Controllers
                     category = FindCategory(childCategory.Id);
                     if (category != null && category.Products != null)
                     {
-                        foreach (var product in category.Products)
+                        foreach (var productView in category.Products)
                         {
-                            productViews.Add(new ProductViewModel(product));
+
+                           var product = _dbContext.Products
+                                .Include(d => d.Manufacturer)
+                                .FirstOrDefault(c => c.Id == productView.Id);
+                                products.Add(product);
                         }
                     }
                 }
             }
 
             // Якщо є товари, передаємо їх у ViewBag.Products
-            if (productViews.Count > 0)
+            if (products.Count > 0)
             {
-                ViewBag.Products = productViews;
+                ViewBag.Products = products.Select(p=> new ProductViewModel(p)).ToList();
             }
 
             return View(categoryView);

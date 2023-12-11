@@ -10,7 +10,8 @@ namespace Coursework_.Models
         public ShopCart(ApplicationDbContext dbContext)
         {
             this._dbContext = dbContext;
-        
+            this.listShopItems = new List<ShopItem>();
+
         }
         
         [Key]
@@ -52,6 +53,18 @@ namespace Coursework_.Models
         {
             listShopItems.Clear();
        
+        }
+
+        public bool HasItemsInCart(ISession session)
+        {
+            string shopCartId = session.GetString("CartId");
+
+            if (shopCartId == null)
+            {
+                return false; // якщо ID корзини в сес≥њ в≥дсутн≥й, то товар≥в в корзин≥ немаЇ
+            }
+
+            return _dbContext.ShopItems.Any(c => c.ShopCartId == shopCartId);
         }
 
     }

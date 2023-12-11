@@ -1,0 +1,27 @@
+﻿@model Coursework_.ViewModels.PurchaseListViewModel
+
+<h2>Підтвердження покупки</h2>
+
+<form asp-action="Buy" asp-controller="Home" method="post">
+    @for (int i = 0; i < Model.Purchases.Count; i++)
+    {
+        <div>
+            <input type="hidden" asp-for="Purchases[i].Id" />
+
+            <label asp-for="Purchases[i].UserName">Ім'я:</label>
+            <input asp-for="Purchases[i].UserName" required>
+
+           @*  <label asp-for="Purchases[i].Email">Email:</label>
+            <input asp-for="Purchases[i].Email" required>
+
+            <label asp-for="Purchases[i].Address">Адреса:</label>
+            <input asp-for="Purchases[i].Address" required>
+
+            <label asp-for="Purchases[i].Number">Номер:</label>
+            <input asp-for="Purchases[i].Number" required> *@
+
+            <hr /> <!-- Роздільник між покупками -->
+        </div>
+    }
+    <button type="submit" class="btn btn-primary">Підтвердити покупку</button>
+</form>

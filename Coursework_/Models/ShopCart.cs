@@ -47,7 +47,13 @@ namespace Coursework_.Models
                 .Include(s => s.product)
                 .ToList();
         }
-    
+
+        public void ClearCart()
+        {
+            listShopItems.Clear();
+       
+        }
+
     }
 
 }

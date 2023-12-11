@@ -1,7 +1,7 @@
 ﻿﻿@using Coursework_.ViewModels
 @model ManufacturerViewModel
 
-<h2>Details</h2>
+<h2>Деталі</h2>
 <div>
     <h4>Manufacturer</h4>
     <hr />
@@ -28,7 +28,7 @@
     <h3>@("Other products of the " + Model.Name)</h3>
     @if (Model.ProductsViews == null)
     {
-        <h3>This manufacturer has no products</h3>
+        <h3>У цього виробника немає товарів</h3>
     }
     else
     {
@@ -36,19 +36,19 @@
             <thead>
                 <tr>
                     <th>
-                        Name
+                        Назва
                     </th>
                     <th>
-                        Price
+                        Ціна
                     </th>
                     <th>
-                        Photo Path
+                        Фото
                     </th>
                     <th>
-                        Category
+                        Категорія
                     </th>
                     <th>
-                        Description
+                        Опис
                     </th>
                 </tr>
             </thead>
@@ -79,5 +79,5 @@
 
 </div>
 <div>
-    <a asp-controller="Device" asp-action="Index">Back to List</a>
+    <a asp-controller="Device" asp-action="Index">Повернутися на головну</a>
 </div>

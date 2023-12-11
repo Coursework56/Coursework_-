@@ -4,44 +4,43 @@
 <div>
     <dl class="row">
         <dt class="col-sm-2">
-            Name
+            Назва
         </dt>
         <dd class="col-sm-10">
             @Model.Name
         </dd>
 
         <dt class="col-sm-2">
-            Country
+            Країна
         </dt>
         <dd class="col-sm-10">
             @Model.Country
         </dd>
 
         <dt class="col-sm-2">
-            Description
+            Опис
         </dt>
         <dd class="col-sm-10">
             @Model.Description
         </dd>
+        @if (Model.ProductsViews != null && Model.ProductsViews.Count > 0)
+        {
+            <form method="post" asp-action="DeleteManufacturer">
+                <input type="hidden" asp-for="Id" />
+                <h3 class="text-danger">Не можна видалити виробника - є пов'язані товари</h3>
+                <input type="submit" disabled value="Delete" class="btn btn-danger" />
+                <br />
+                <a asp-action="Index">Повернутись на головну</a>
+            </form>
+        }
+        else
+        {
+            <form method="post" asp-action="DeleteManufacturer">
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" value="Delete" class="btn btn-danger" />
+                <br />
+                <a asp-action="Index">Повернутись на головну</a>
+            </form>
+        }
     </dl>
-
-    @if (Model.ProductsViews.Count > 0)
-    {
-        <form method="post" asp-action="DeleteManufacturer">
-            <input type="hidden" asp-for="Id" />
-            <h3 class="text-danger">cannot delete a manufacturer, still has the goods</h3>
-            <input type="submit" disabled value="Delete" class="btn btn-danger" />
-            <br />
-            <a asp-action="Index">Back to List</a>
-        </form>
-    }
-    else
-    {
-        <form method="post" asp-action="DeleteManufacturer">
-            <input type="hidden" asp-for="Id" />
-            <input type="submit" value="Delete" class="btn btn-danger" />
-            <br />
-            <a asp-action="Index">Back to List</a>
-        </form>
-    }
 </div>

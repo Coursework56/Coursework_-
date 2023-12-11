@@ -203,8 +203,22 @@ namespace Volt.Controllers
         public IActionResult DeleteProduct()
         {
             var products = _dbContext.Products.ToList();
-            return View(products);
+            var productViewModels = products.Select(p => new ProductViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                PhotoPath = p.PhotoPath,
+                Manufacturer = p.Manufacturer.ToString(),
+                Category = p.Category.ToString(),
+                Amount = p.Amount,
+                Description = p.Description
+                // Додайте інші властивості ProductViewModel за необхідністю
+            }).ToList();
+
+            return View(productViewModels);
         }
+
 
         [HttpPost]
         public IActionResult DeleteProduct(int id)

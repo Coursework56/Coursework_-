@@ -1,62 +1,62 @@
-﻿@model List<Coursework_.ViewModels.ProductViewModel>
+﻿@model Coursework_.ViewModels.ProductViewModel
 
-@foreach (var productViewModel in Model)
-{
+
     <div>
         <dl class="row">
             <dt class="col-sm-2">
                 Назва
             </dt>
             <dd class="col-sm-10">
-                @productViewModel.Name
+                @Model.Name
             </dd>
 
             <dt class="col-sm-2">
                 Ціна
             </dt>
             <dd class="col-sm-10">
-                @productViewModel.Price
+                @Model.Price
             </dd>
 
             <dt class="col-sm-2">
                 Фото
             </dt>
             <dd class="col-sm-10">
-                @productViewModel.PhotoPath
+            <div style="width: 350px; height: 200px; overflow: hidden;">
+                <img style="width: auto; height: 100%;" src="@Model.PhotoPath" alt="Фото електроніки" />
+            </div>
             </dd>
 
             <dt class="col-sm-2">
                 Виробник
             </dt>
             <dd class="col-sm-10">
-                @productViewModel.Manufacturer
+                @Model.Manufacturer
             </dd>
 
             <dt class="col-sm-2">
                 Категорія
             </dt>
             <dd class="col-sm-10">
-                @productViewModel.Category
+                @Model.Category
             </dd>
 
             <dt class="col-sm-2">
                 Кількість
             </dt>
             <dd class="col-sm-10">
-                @productViewModel.Amount
+                @Model.Amount
             </dd>
         </dl>
         <div class="container">
             <h3>Опис</h3>
             <p class="text-black">
-                @productViewModel.Description
+                @Model.Description
             </p>
         </div>
         <form method="post" asp-action="DeleteProduct">
-            <input type="hidden" asp-for="@productViewModel.Id" />
+            <input type="hidden" asp-for="@Model.Id" />
             <input type="submit" value="Delete" class="btn btn-danger" />
             <br />
             <a asp-action="Index">Повернутись</a>
         </form>
     </div>
-}

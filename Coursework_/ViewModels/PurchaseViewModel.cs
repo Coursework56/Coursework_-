@@ -9,12 +9,12 @@ namespace Coursework_.ViewModels
         public int Id { get; set; }
 
         // Ім'я користувача з обов'язковими обмеженнями
-        [Required(ErrorMessage = "User name is required")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Length must be between 3 and 20 characters")]
+        [Required(ErrorMessage = "Ім'я необхідне")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Довжина має бути більше ніж два символи")]
         public string UserName { get; set; }
 
         // Ідентифікатор пристрою з обов'язковими обмеженнями
-        [Required(ErrorMessage = "Device ID is required")]
+        [Required(ErrorMessage = "Дивайс необхідний")]
         public int DeviceId { get; set; }
 
         public int ShopCartId { get; set; }

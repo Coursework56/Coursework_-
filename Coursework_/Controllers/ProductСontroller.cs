@@ -152,71 +152,50 @@ namespace Volt.Controllers
             return _dbContext.Products.Any(p => p.Id == id);
         }
 
-        public async Task<ActionResult> Buy(int? id)
-        {
-            if (!id.HasValue)
-            {
-                var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id.Value);
 
-                if (product != null)
-                {
-                    return NotFound();
-                }
+        public async Task<ActionResult> BuyProduct(int? Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
             }
 
-            return View();
-        }
-
-
-        [HttpGet]
-        public IActionResult BuyProduct(int id)
-        {
-            var product = _dbContext.Products
-                .Include(p => p.Manufacturer)
-                .Include(p => p.Category)
-                .FirstOrDefault(p => p.Id == id);
+            var product = await _dbContext.Products.FirstOrDefaultAsync(e => e.Id == Id);
 
             if (product == null)
             {
                 return NotFound();
             }
 
-            var productView = new ProductViewModel(product);
             var purchaseViewModel = new PurchaseViewModel
             {
-                ProductView = productView
+                ProductView = new ProductViewModel(product)
+                // You might need to set other properties of PurchaseViewModel as required
             };
 
             return View(purchaseViewModel);
         }
 
         [HttpPost]
-        [ActionName("BuyProductPost")]
-        public IActionResult BuyProduct(int productId)
+        public async Task<string> BuyProduct(Purchase purchase)
         {
-            var product = _dbContext.Products.FirstOrDefault(p => p.Id == productId);
+            var electronic = await _dbContext.Products.FirstOrDefaultAsync(e => e.Id == purchase.Id);
 
-            if (product == null)
+            if (electronic != null && electronic.Amount > 0)
             {
-                return NotFound();
-            }
+                purchase.DateTime = DateTime.Now;
 
-            if (product.Amount > 0)
-            {
-                product.Amount -= 1;
-
-                var purchase = new Purchase
-                {
-                    Id = product.Id,
-                };
+                purchase.Id = 0;
 
                 _dbContext.Purchases.Add(purchase);
-                _dbContext.SaveChanges();
 
-                return RedirectToAction("Index", "Home");
+                electronic.Amount--; // Deduct the quantity
+                await _dbContext.SaveChangesAsync(); // Save changes asynchronously
+
+                return "ƒ€куЇмо, " + purchase.UserName + ", за куп≥влю!";
             }
 
-            return RedirectToAction("ProductUnavailable", "Error");
+            return "¬ибачте, товар в≥дсутн≥й або зак≥нчивс€!";
         }
 
 

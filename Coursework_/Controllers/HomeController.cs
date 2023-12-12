@@ -45,6 +45,8 @@ namespace Coursework_.Controllers
             return View(products);
         }
 
+
+
         public ViewResult ShopCart()
         {
             var items = _cart.GetShopItems();
@@ -56,6 +58,20 @@ namespace Coursework_.Controllers
             };
 
             return View(obj);
+        }
+
+        [HttpGet]
+        [HttpGet]
+        public IActionResult Search(string searchString)
+        {
+            var products = _dbContext.Products
+                .Include(p => p.Category)
+                .Where(p => p.Name.Contains(searchString) || p.Description.Contains(searchString)) // Consider searching in Description as well
+                .ToList();
+
+            var productViewModels = products.Select(p => new ProductViewModel(p)).ToList();
+
+            return View("Index", productViewModels); // Pass the search results to the Index view
         }
 
         public RedirectToActionResult AddToCart(int id)
@@ -123,13 +139,15 @@ namespace Coursework_.Controllers
 
             if(ModelState.IsValid)
             {
+                _dbContext.SaveChanges();
+                _httpContextAccessor.HttpContext.Session.Clear();
+                _cart.ClearCart();
                 _allOrders.createOrder(order);
                 return RedirectToAction("Complete");
+                
             }
 
-            _dbContext.SaveChanges();
-            _httpContextAccessor.HttpContext.Session.Clear();
-            _cart.ClearCart();
+           
 
             return View(order);
         }

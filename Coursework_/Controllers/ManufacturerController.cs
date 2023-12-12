@@ -131,10 +131,26 @@ namespace Coursework_.Controllers
                 return NotFound();
             }
 
-            return View(manufacturer);
+            var manufacturerViewModel = new ManufacturerViewModel
+            {
+                Id = manufacturer.Id,
+                Name = manufacturer.Name ?? string.Empty,
+                Country = manufacturer.Country ?? string.Empty,
+                Description = manufacturer.Description ?? string.Empty
+            };
+
+            if (manufacturer.Products != null && manufacturer.Products.Count > 0)
+            {
+                return BadRequest("Помилка при видалені компанії!!!");
+            }
+            else
+            {
+                // Return the view to confirm the deletion of the manufacturer
+                return DeleteConfirmed(id.Value);
+            }
         }
 
-        [HttpPost, ActionName("DeleteManufacturer")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
@@ -148,7 +164,7 @@ namespace Coursework_.Controllers
             _dbContext.Manufacturers.Remove(manufacturer);
             _dbContext.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home"); // Перенаправлення на домашню сторінку
         }
 
         private bool ManufacturerExists(int id)

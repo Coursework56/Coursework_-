@@ -3,7 +3,7 @@
 <div class="container">
     @if (!Model.shopCart.listShopItems.Any())
     {
-        <p>Корзина пуста</p>
+        <p>Корзина порожня</p>
     }
     else
     {
@@ -12,6 +12,15 @@
             <div class="alert alert-success mt-3">
                 <b>Ґаджет: </b>@el.product.Name<br />
                 <b>Ціна: </b>@el.product.Price.ToString("c");
+
+                <!-- Додавання фотографії товару -->
+                <img src="@el.product.PhotoPath" alt="Фото товару" style="max-width: 100px; max-height: 100px;" />
+
+                <!-- Кнопка для видалення товару з корзини -->
+                <form asp-action="RemoveFromCart" asp-controller="Home" method="post">
+                    <input type="hidden" name="productId" value="@el.product.Id" />
+                    <button type="submit" class="btn btn-outline-danger">Видалити з корзини</button>
+                </form>
             </div>
         }
         <hr />

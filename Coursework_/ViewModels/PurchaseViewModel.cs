@@ -17,6 +17,8 @@ namespace Coursework_.ViewModels
         [Required(ErrorMessage = "Device ID is required")]
         public int DeviceId { get; set; }
 
+        public int ShopCartId { get; set; }
+
         // Відображення товару, що був придбаний (якщо існує)
         public ProductViewModel? ProductView { get; set; }
 

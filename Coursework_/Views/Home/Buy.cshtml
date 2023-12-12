@@ -1,27 +1,36 @@
-﻿@model Coursework_.ViewModels.PurchaseListViewModel
+﻿@model Order
 
-<h2>Підтвердження покупки</h2>
-
-<form asp-action="Buy" asp-controller="Home" method="post">
-    @for (int i = 0; i < Model.Purchases.Count; i++)
-    {
-        <div>
-            <input type="hidden" asp-for="Purchases[i].Id" />
-
-            <label asp-for="Purchases[i].UserName">Ім'я:</label>
-            <input asp-for="Purchases[i].UserName" required>
-
-           @*  <label asp-for="Purchases[i].Email">Email:</label>
-            <input asp-for="Purchases[i].Email" required>
-
-            <label asp-for="Purchases[i].Address">Адреса:</label>
-            <input asp-for="Purchases[i].Address" required>
-
-            <label asp-for="Purchases[i].Number">Номер:</label>
-            <input asp-for="Purchases[i].Number" required> *@
-
-            <hr /> <!-- Роздільник між покупками -->
+<div class="row">
+    <h3>Оформлення заказа</h3>
+    <form asp-controller="Home" asp-action="Buy" method="post" class="form-horizontal">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <div class="col-md-5">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-    }
-    <button type="submit" class="btn btn-primary">Підтвердити покупку</button>
-</form>
+        </div>
+        <div class="form-group">
+           <label asp-for="Surname"></label>
+           <div class="col-md-5">
+               <input asp-for="Surname" class="form-control" />
+               <span asp-validation-for="Surname" class="text-danger"></span>
+           </div>
+        </div>
+          <div class="form-group">
+          <label asp-for="Address"></label>
+         <div class="col-md-5">
+         <input asp-for="Address" class="form-control" />
+         <span asp-validation-for="Address" class="text-danger"></span>
+         </div>
+    </div>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <div class="col-md-5">
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <input type="submit" class="btn btn-success" value="Оформити покупку"/>
+    </form>
+</div>

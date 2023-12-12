@@ -21,5 +21,6 @@ namespace Coursework_.ViewModels
                 Purchases.Add(new PurchaseViewModel(purchase));
             }
         }
+
     }
 }

@@ -36,6 +36,7 @@ namespace Coursework_.Models
             {
                 ShopCartId = ShopCartId,
                 product = product,
+                ProductId = product.Id,
                 Price = product.Price,
             });
 
@@ -65,6 +66,26 @@ namespace Coursework_.Models
             }
 
             return _dbContext.ShopItems.Any(c => c.ShopCartId == shopCartId);
+        }
+
+        public List<int> GetProductIdsInCart()
+        {
+            return _dbContext.ShopItems
+                .Where(c => c.ShopCartId == ShopCartId)
+                .Select(s => s.product.Id)
+                .ToList();
+        }
+
+        public void RemoveFromCart(Product product)
+        {
+            var shopCartId = ShopCartId;
+            var itemToRemove = _dbContext.ShopItems.FirstOrDefault(i => i.product.Id == product.Id && i.ShopCartId == shopCartId);
+
+            if (itemToRemove != null)
+            {
+                _dbContext.ShopItems.Remove(itemToRemove);
+                _dbContext.SaveChanges();
+            }
         }
 
     }

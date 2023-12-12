@@ -222,8 +222,12 @@ namespace Volt.Controllers
 
 
         [HttpGet]
-        public IActionResult DeleteProduct(int id)
+        public IActionResult DeleteProduct(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             var product = _dbContext.Products
                 .Include(p=>p.Manufacturer)
                 .Include(p => p.Category)

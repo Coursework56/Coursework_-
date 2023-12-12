@@ -1,5 +1,4 @@
-﻿@using Coursework_.ViewModels
-@model PurchaseViewModel
+﻿@model Coursework_.ViewModels.PurchaseViewModel
 
 @if (Model != null && Model.ProductView != null)
 {
@@ -54,24 +53,24 @@
                 <input type="hidden" asp-for="DeviceId" />
 
                 <div class="form-group">
-                    <label asp-for="UserName">Username</label>
+                    <label asp-for="UserName">Ім'я користувача</label>
                     <input asp-for="UserName" class="form-control" />
                     <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
 
-                <input type="submit" value="Confirm" class="btn btn-primary" />
-                <br />
-                <a asp-action="Index">Back to List</a>
+                <input type="submit" value="Підтвердити" class="btn btn-primary" />
             </form>
+
+            <form method="post" asp-action="CancelPurchase" asp-controller="Product">
+                <input type="hidden" asp-for="DeviceId" value="@Model.ProductView.Id" />
+                <button type="submit" class="btn btn-danger">Скасувати покупку</button>
+            </form>
+            <br />
+            <a asp-action="Index">Повернутися до списку</a>
         </div>
     </div>
 }
 else
 {
-    <p>Error: Unable to display product details.</p>
-}
-
-@section Scripts
-    {
-    <partial name="_ValidationScriptsPartial" />
+    <p>Помилка: Неможливо відобразити деталі товару.</p>
 }

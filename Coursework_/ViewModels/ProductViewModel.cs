@@ -11,7 +11,7 @@ namespace Coursework_.ViewModels
 
         // Назва товару з обов'язковими обмеженнями
         [Required(ErrorMessage = "Name is required")]
-        //[Remote("IsNameUnique", "Product", ErrorMessage = "This name is already in use")]
+        [Remote("CheckProductName", "Product", ErrorMessage = "This name is already in use")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Length must be between 3 and 20 characters")]
         public string Name { get; set; }
 

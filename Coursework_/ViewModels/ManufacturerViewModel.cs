@@ -10,19 +10,19 @@ namespace Coursework_.ViewModels
         public int Id { get; set; }
 
         // Назва виробника з обов'язковими обмеженнями
-        [Required(ErrorMessage = "Name is required")]
-        [Remote("CheckManufacturerName", "Manufacturer", ErrorMessage = "This name is already in use")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Length must be between 3 and 20 characters")]
+        [Required(ErrorMessage = "Назва необхідна")]
+        [Remote("CheckManufacturerName", "Manufacturer", ErrorMessage = "Ця назва вже використовується")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Довжина має бути більше ніж 2 символи")]
         public string Name { get; set; }
 
         // Опис виробника з обов'язковими обмеженнями
-        [Required(ErrorMessage = "Description is required")]
-        [StringLength(200, MinimumLength = 3, ErrorMessage = "Length must be between 3 and 200 characters")]
+        [Required(ErrorMessage = "Лпис необхідний")]
+        [StringLength(200, MinimumLength = 3, ErrorMessage = "Довжина має бути більше ніж 2 символи")]
         public string Description { get; set; }
 
         // Країна виробника з обов'язковими обмеженнями
-        [Required(ErrorMessage = "Country is required")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Length must be between 3 and 20 characters")]
+        [Required(ErrorMessage = "Країна-виробник необхідна")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Довжина має бути більше ніж 2 символи")]
         public string Country { get; set; }
 
         // Список відображень товарів для даного виробника

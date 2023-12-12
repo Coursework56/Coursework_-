@@ -10,7 +10,7 @@ namespace Coursework_.ViewModels
         public int Id { get; set; }
 
         // Назва категорії з обов'язковими обмеженнями
-        [Required]
+        [Required(ErrorMessage = "Назва необхідна")]
         [Remote("IsNameUnique", "Category", ErrorMessage = "Ця назва вже використовується")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Довжина має бути більше ніж 2 символи")]
         public string Name { get; set; }

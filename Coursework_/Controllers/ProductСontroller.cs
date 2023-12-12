@@ -65,12 +65,12 @@ namespace Volt.Controllers
         }
 
         [AcceptVerbs("Get", "Post")]
-        public IActionResult CheckProductName(string name, int categoryId)
+        public IActionResult CheckProductName(string name)
         {
-            var existingCategory = _dbContext.Categories
-                .Any(ec => ec.Name == name && ec.Id != categoryId);
+            var existingProduct = _dbContext.Products
+                .Any(ec => ec.Name == name);
 
-            return Json(!existingCategory);
+            return Json(!existingProduct);
         }
 
         private void PopulateDropdowns()
@@ -200,28 +200,19 @@ namespace Volt.Controllers
         }
 
         [HttpGet]
-        public IActionResult DeleteProduct()
+        public IActionResult DeleteProduct(int id)
         {
-            var products = _dbContext.Products.ToList();
-            var productViewModels = products.Select(p => new ProductViewModel
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Price = p.Price,
-                PhotoPath = p.PhotoPath,
-                Manufacturer = p.Manufacturer?.ToString() ?? "N/A",
-                Category = p.Category?.ToString() ?? "N/A",
-                Amount = p.Amount,
-                Description = p.Description
-                
-            }).ToList();
-
-            return View(productViewModels);
+            var product = _dbContext.Products
+                .Include(p=>p.Manufacturer)
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Id==id);
+            var productView = new ProductViewModel(product);
+            return View(productView);
         }
 
 
-        [HttpPost]
-        public IActionResult DeleteProduct(int id)
+        [HttpPost,ActionName("DeleteProduct")]
+        public IActionResult DeleteProductConfirmed(int id)
         {
             var product = _dbContext.Products.Find(id);
 

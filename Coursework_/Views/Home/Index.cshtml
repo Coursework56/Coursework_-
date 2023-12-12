@@ -31,7 +31,10 @@
                                     <a asp-controller="Home" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-sm btn-outline-success">Додати до корзини</a>
                                 </div>
                                 <div class="btn-group">
-                                    <a asp-controller="Product" asp-action="DetailsProduct" asp-route-id="@product.Id" class="btn btn-light">Деталі</a>
+                                    <a asp-controller="Product" asp-action="DetailsProduct" asp-route-id="@product.Id" class="btn btn-sm btn-outline-secondary">Деталі</a>
+                                </div>
+                                <div class="btn-group">
+                                    <a asp-controller="Product" asp-action="BuyProduct" asp-route-id="@product.Id" class="btn btn-sm btn-outline-secondary">Купити</a>
                                 </div>
                                 <small class="text-muted">$@product.Price</small>
                             </div>

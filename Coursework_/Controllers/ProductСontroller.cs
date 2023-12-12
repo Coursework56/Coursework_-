@@ -167,8 +167,32 @@ namespace Volt.Controllers
             return View();
         }
 
+
+        [HttpGet]
+        public IActionResult BuyProduct(int id)
+        {
+            var product = _dbContext.Products
+                .Include(p => p.Manufacturer)
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var productView = new ProductViewModel(product);
+            var purchaseViewModel = new PurchaseViewModel
+            {
+                ProductView = productView
+            };
+
+            return View(purchaseViewModel);
+        }
+
         [HttpPost]
-        public IActionResult Buy(int productId)
+        [ActionName("BuyProductPost")]
+        public IActionResult BuyProduct(int productId)
         {
             var product = _dbContext.Products.FirstOrDefault(p => p.Id == productId);
 
@@ -178,26 +202,24 @@ namespace Volt.Controllers
             }
 
             if (product.Amount > 0)
-            { 
+            {
                 product.Amount -= 1;
 
-               
                 var purchase = new Purchase
                 {
                     Id = product.Id,
-                    
                 };
 
                 _dbContext.Purchases.Add(purchase);
                 _dbContext.SaveChanges();
 
-               
-                _dbContext.SaveChanges();
-
                 return RedirectToAction("Index", "Home");
             }
+
             return RedirectToAction("ProductUnavailable", "Error");
         }
+
+
 
         [HttpGet]
         public IActionResult DeleteProduct(int? id)

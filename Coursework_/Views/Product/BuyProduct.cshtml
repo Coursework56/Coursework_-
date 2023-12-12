@@ -1,69 +1,76 @@
-﻿﻿@using Coursework_.ViewModels
+﻿@using Coursework_.ViewModels
 @model PurchaseViewModel
 
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            Назва
-        </dt>
-        <dd class="col-sm-10">
-            @Model.ProductView.Name
-        </dd>
-
-        <dt class="col-sm-2">
-            Ціна
-        </dt>
-        <dd class="col-sm-10">
-            @Model.ProductView.Price
-        </dd>
-
-        <dt class="col-sm-2">
-            Фото
-        </dt>
-        <dd class="col-sm-10">
-            @Model.ProductView.PhotoPath
-        </dd>
-
-        <dt class="col-sm-2">
-            Виробник
-        </dt>
-        <dd class="col-sm-10">
-            @Model.ProductView.Manufacturer
-        </dd>
-
-        <dt class="col-sm-2">
-            Категорія
-        </dt>
-        <dd class="col-sm-10">
-            @Model.ProductView.Category
-        </dd>
- 
-    </dl>
-    <div class="container">
-        <h3>Description</h3>
-        <p class="text-black">
-            @Model.ProductView.Description
-        </p>
-    </div>
+@if (Model != null && Model.ProductView != null)
+{
     <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                Назва
+            </dt>
+            <dd class="col-sm-10">
+                @Model.ProductView.Name
+            </dd>
 
-        <form method="post" asp-action="Buy">
-            <input type="hidden" asp-for="DeviceId" />
-            <div class="form-group">
-                <label asp-for="UserName">UserName</label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <input type="submit" value="Confirm" class="btn btn-primary" />
-            <br />
-            <a asp-action="Index">Back to List</a>
-        </form>
+            <dt class="col-sm-2">
+                Ціна
+            </dt>
+            <dd class="col-sm-10">
+                @Model.ProductView.Price
+            </dd>
+
+            <dt class="col-sm-2">
+                Фото
+            </dt>
+            <dd class="col-sm-10">
+                <img src="@Model.ProductView.PhotoPath" alt="Фото товару" class="img-fluid" />
+            </dd>
+
+            <dt class="col-sm-2">
+                Виробник
+            </dt>
+            <dd class="col-sm-10">
+                @Model.ProductView.Manufacturer
+            </dd>
+
+            <dt class="col-sm-2">
+                Категорія
+            </dt>
+            <dd class="col-sm-10">
+                @Model.ProductView.Category
+            </dd>
+        </dl>
+
+        <div class="container">
+            <h3>Description</h3>
+            <p class="text-black">
+                @Model.ProductView.Description
+            </p>
+        </div>
+
+        <div>
+            <form method="post" asp-action="BuyProduct">
+                <input type="hidden" asp-for="DeviceId" />
+
+                <div class="form-group">
+                    <label asp-for="UserName">Username</label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+
+                <input type="submit" value="Confirm" class="btn btn-primary" />
+                <br />
+                <a asp-action="Index">Back to List</a>
+            </form>
+        </div>
     </div>
+}
+else
+{
+    <p>Error: Unable to display product details.</p>
+}
 
-</div>
 @section Scripts
     {
-    @{
-        <partial name="_ValidationScriptsPartial" />
-    }
+    <partial name="_ValidationScriptsPartial" />
 }

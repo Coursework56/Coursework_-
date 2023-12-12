@@ -5,6 +5,8 @@ using System.Linq;
 using Coursework_.Data;
 using Coursework_.Models;
 using Coursework_.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Coursework_.Data.Interfaces;
 
 namespace Coursework_.Controllers
 {
@@ -13,12 +15,14 @@ namespace Coursework_.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly ShopCart _cart;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        //v
-        public HomeController(ApplicationDbContext dbContext, ShopCart cart, IHttpContextAccessor httpContextAccessor)
+        private readonly IAllOrders _allOrders;
+
+        public HomeController(ApplicationDbContext dbContext, ShopCart cart, IHttpContextAccessor httpContextAccessor, IAllOrders allOrders)
         {
             _dbContext = dbContext;
             _cart = cart;
             _httpContextAccessor = httpContextAccessor;
+            _allOrders = allOrders;
         }
 
         public IActionResult Index()
@@ -57,9 +61,41 @@ namespace Coursework_.Controllers
         public RedirectToActionResult AddToCart(int id)
         {
             var item = _dbContext.Products.FirstOrDefault(i => i.Id == id);
-            _cart.AddToCart(item);
+            if (item != null && item.Amount > 0) // Перевірка наявності товару перед додаванням до кошика
+            {
+                _cart.AddToCart(item);
+                item.Amount--; // Віднімаємо одиницю від кількості товару в базі даних
+                _dbContext.SaveChanges(); // Оновлюємо зміни в базі даних
+            }
+
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public IActionResult RemoveFromCart(int productId)
+        {
+            var productToRemove = _dbContext.Products.FirstOrDefault(p => p.Id == productId);
+
+            if (productToRemove != null)
+            {
+                int originalAmount = productToRemove.Amount; // Збереження оригінальної кількості товару
+
+                _cart.RemoveFromCart(productToRemove);
+                // Видалення товару з корзини
+
+                // Додавання одиниці товару назад до бази даних
+                if (originalAmount >= 0) // Перевірка, щоб уникнути від'ємної кількості
+                {
+                    productToRemove.Amount = originalAmount + 1;
+                    _dbContext.SaveChanges();
+                }
+
+                return RedirectToAction("ShopCart");
+            }
+
+            return NotFound(); // Або повернення іншого результату в разі невдачі
+        }
+
 
         public IActionResult Options()
         {
@@ -69,88 +105,43 @@ namespace Coursework_.Controllers
 
 
         [HttpGet]
-        public IActionResult Buy(int? id)
+        public IActionResult Buy()
         {
-            var itemsInCart = _cart.GetShopItems();
-
-            if (id.HasValue)
-            {
-                var item = _dbContext.Products.FirstOrDefault(i => i.Id == id.Value);
-
-                if (item != null && item.Amount > 0) // Перевірка наявності товару
-                {
-                    // Додаємо товар до кошика
-
-                    // Віднімаємо одиницю від кількості товару
-                    item.Amount--;
-
-                    // Оновлюємо зміни в базі даних (або вашому сховищі)
-                    _dbContext.SaveChanges(); // Зберігаємо зміни у базі даних
-                }
-                else
-                {
-                    TempData["EmptyCart"] = "Корзина порожня";
-                    return RedirectToAction("Index");
-                }
-            }
-
-            if (!itemsInCart.Any())
-            {
-                TempData["EmptyCart"] = "Корзина порожня";
-                return RedirectToAction("Index");
-            }
-
-            var purchases = itemsInCart.Select(item => new PurchaseViewModel
-            {
-                UserName = "", // Ініціалізуйте інші необхідні властивості покупки
-                DeviceId = id ?? 0 // Використовуємо DeviceId отриманий з параметра методу або за замовчуванням 0
-            }).ToList();
-
-            var purchaseListViewModel = new PurchaseListViewModel
-            {
-                Purchases = purchases
-            };
-
-            return View(purchaseListViewModel);
+            return View();
         }
 
+
+
         [HttpPost]
-        public IActionResult Buy(PurchaseListViewModel purchaseListViewModel)
+        public IActionResult Buy(Order order)
         {
-            if (!_cart.HasItemsInCart(_httpContextAccessor.HttpContext.Session))
+            _cart.listShopItems = _cart.GetShopItems();
+            if(_cart.listShopItems == null || _cart.listShopItems.Count == 0)
             {
-                TempData["EmptyCart"] = "Корзина порожня";
-                return RedirectToAction("Index");
+                ModelState.AddModelError("", "Корзина порожня! Якщо ви хочете оформити покупку, виберіть щось!");
             }
 
-            if (!ModelState.IsValid || purchaseListViewModel.Purchases == null || !purchaseListViewModel.Purchases.Any())
+            if(ModelState.IsValid)
             {
-                // Повернути представлення з PurchaseListViewModel у випадку недійсних даних або порожнього списку покупок
-                return View(purchaseListViewModel);
+                _allOrders.createOrder(order);
+                return RedirectToAction("Complete");
             }
 
-            // Логіка для збереження покупок в базі даних
-            foreach (var purchaseViewModel in purchaseListViewModel.Purchases)
-            {
-                var purchase = new Purchase
-                {
-                    UserName = purchaseViewModel.UserName,
-                    DeviceId = purchaseViewModel.DeviceId,
-                    DateTime = DateTime.Now,
-                };
-
-                _dbContext.Purchases.Add(purchase);
-            }
-
-            // Збереження всіх покупок в базі даних
             _dbContext.SaveChanges();
             _httpContextAccessor.HttpContext.Session.Clear();
             _cart.ClearCart();
 
-            TempData["PurchaseSuccess"] = "Покупку оформлено успішно!";
-
-            return RedirectToAction("Index");
+            return View(order);
         }
+
+        public IActionResult Complete()
+        {
+            ViewBag.Message = "Замовлення успішно оформлено!";
+            return View();
+        }
+
+
+        
 
         public IActionResult Clear()
         {

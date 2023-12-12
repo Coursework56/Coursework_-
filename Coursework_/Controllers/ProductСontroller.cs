@@ -209,11 +209,11 @@ namespace Volt.Controllers
                 Name = p.Name,
                 Price = p.Price,
                 PhotoPath = p.PhotoPath,
-                Manufacturer = p.Manufacturer.ToString(),
-                Category = p.Category.ToString(),
+                Manufacturer = p.Manufacturer?.ToString() ?? "N/A",
+                Category = p.Category?.ToString() ?? "N/A",
                 Amount = p.Amount,
                 Description = p.Description
-                // Додайте інші властивості ProductViewModel за необхідністю
+                
             }).ToList();
 
             return View(productViewModels);

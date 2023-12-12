@@ -177,7 +177,7 @@ namespace Volt.Controllers
         }
 
         [HttpPost]
-        public async Task<string> BuyProduct(Purchase purchase)
+        public async Task<IActionResult> BuyProduct(Purchase purchase)
         {
             var electronic = await _dbContext.Products.FirstOrDefaultAsync(e => e.Id == purchase.Id);
 
@@ -192,12 +192,38 @@ namespace Volt.Controllers
                 electronic.Amount--; // Deduct the quantity
                 await _dbContext.SaveChangesAsync(); // Save changes asynchronously
 
-                return "Дякуємо, " + purchase.UserName + ", за купівлю!";
+                return RedirectToAction("Complete", "Home"); // Redirect to Complete action in Home controller
             }
 
-            return "Вибачте, товар відсутній або закінчився!";
+            return NotFound(); // Or any other appropriate action if the product is not available
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CancelPurchase(int? purchaseId)
+        {
+            if (purchaseId == null)
+            {
+                return NotFound();
+            }
+
+            var purchase = await _dbContext.Purchases.FirstOrDefaultAsync(p => p.Id == purchaseId);
+
+            if (purchase != null)
+            {
+                var product = purchase.Product; // Отримання продукту, пов'язаного з покупкою
+
+                if (product != null)
+                {
+                    product.Amount++; // Збільшити кількість товару
+                    _dbContext.Purchases.Remove(purchase); // Видалити запис про покупку
+                    await _dbContext.SaveChangesAsync(); // Зберегти зміни асинхронно
+
+                    return RedirectToAction("Index", "Home"); // Перенаправити на список товарів або будь-який відповідний вигляд
+                }
+            }
+
+            return NotFound(); // Або будь-яке інше відповідне дійство, якщо покупку або товар не знайдено
+        }
 
 
         [HttpGet]

@@ -38,7 +38,8 @@ namespace Coursework_.Controllers
                     Price = p.Price,
                     PhotoPath = p.PhotoPath,
                     CategoryId = p.CategoryId,
-                    ManufacturerId = p.ManufacturerId
+                    ManufacturerId = p.ManufacturerId,
+                    Amount= p.Amount
                 })
                 .ToList();
 

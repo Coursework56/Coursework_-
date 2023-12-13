@@ -65,12 +65,12 @@ namespace Volt.Controllers
         }
 
         [AcceptVerbs("Get", "Post")]
-        public IActionResult CheckProductName(string name)
+        public IActionResult CheckProductName(string name, int? id)
         {
-            var existingProduct = _dbContext.Products
-                .Any(ec => ec.Name == name);
+            var existingManufacturer = _dbContext.Products
+                .Any(m => m.Name == name && m.Id != id);
 
-            return Json(!existingProduct);
+            return Json(!existingManufacturer);
         }
 
         private void PopulateDropdowns()

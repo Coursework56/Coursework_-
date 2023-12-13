@@ -4,21 +4,21 @@
     <h3>Оформлення покупки</h3>
     <form asp-controller="Home" asp-action="Buy" method="post" class="form-horizontal">
         <div class="form-group">
-            <label asp-for="Name">Ім'я</label>
+            <label asp-for="Name"></label>
             <div class="col-md-5">
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         </div>
         <div class="form-group">
-           <label asp-for="Surname">Прізвище</label>
+           <label asp-for="Surname"></label>
            <div class="col-md-5">
                <input asp-for="Surname" class="form-control" />
                <span asp-validation-for="Surname" class="text-danger"></span>
            </div>
         </div>
           <div class="form-group">
-          <label asp-for="Address">Адреса</label>
+          <label asp-for="Address"></label>
          <div class="col-md-5">
          <input asp-for="Address" class="form-control" />
          <span asp-validation-for="Address" class="text-danger"></span>
@@ -31,6 +31,6 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>
-        <input type="submit" class="btn btn-outline-success m-3" value="Оформити покупку"/>
+        <input type="submit" class="btn btn-success" value="Оформити покупку"/>
     </form>
 </div>

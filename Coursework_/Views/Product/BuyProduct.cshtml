@@ -4,73 +4,73 @@
 {
     <div>
         <dl class="row">
-            <dt class="col-sm-2 bg-secondary text-white">
+            <dt class="col-sm-2">
                 Назва
             </dt>
             <dd class="col-sm-10">
                 @Model.ProductView.Name
             </dd>
 
-            <dt class="col-sm-2 bg-secondary text-white">
+            <dt class="col-sm-2">
                 Ціна
             </dt>
             <dd class="col-sm-10">
                 @Model.ProductView.Price
             </dd>
 
-            <dt class="col-sm-2 bg-secondary text-white">
-                Виробник
-            </dt>
-            <dd class="col-sm-10">
-                @Model.ProductView.Manufacturer
-            </dd>
-
-            <dt class="col-sm-2 bg-secondary text-white">
-                Категорія
-            </dt>
-            <dd class="col-sm-10">
-                @Model.ProductView.Category
-            </dd>
-             <dt class="col-sm-2 bg-secondary text-white">
+            <dt class="col-sm-2">
                 Фото
             </dt>
             <dd class="col-sm-10">
                 <img src="@Model.ProductView.PhotoPath" alt="Фото товару" class="img-fluid" />
             </dd>
 
+            <dt class="col-sm-2">
+                Виробник
+            </dt>
+            <dd class="col-sm-10">
+                @Model.ProductView.Manufacturer
+            </dd>
+
+            <dt class="col-sm-2">
+                Категорія
+            </dt>
+            <dd class="col-sm-10">
+                @Model.ProductView.Category
+            </dd>
         </dl>
 
-        <div class="card border-secondary">
-            <h3 class="card-header bg-transparent border-dark">Description</h3>
-            <p class="card-text text-black m-3 p-3">
+        <div class="container">
+            <h3>Description</h3>
+            <p class="text-black">
                 @Model.ProductView.Description
             </p>
         </div>
-        <hr/>
+
         <div class="row">
-            <h3 class="mb-4">Оформлення покупки</h3>
+            <h3>Оформлення покупки</h3>
             <form method="post" asp-action="BuyProduct">
                 <input type="hidden" asp-for="DeviceId" />
 
-                <div class="form-group mb-3">
+                <div class="form-group">
                     <label asp-for="UserName">Ім'я користувача</label>
                     <input asp-for="UserName" class="form-control" />
                     <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
 
-                <input type="submit" value="Підтвердити" class="btn btn-outline-success m-2" />
+                <input type="submit" value="Підтвердити" class="btn btn-primary" />
             </form>
 
             <form method="post" asp-action="CancelPurchase" asp-controller="Product">
                 <input type="hidden" asp-for="DeviceId" value="@Model.ProductView.Id" />
-                <button type="submit" class="btn btn-outline-danger m-2">Скасувати покупку</button>
+                <button type="submit" class="btn btn-danger">Скасувати покупку</button>
             </form>
             <br />
-            <a asp-action="Index" class="btn btn-outline-secondary">Повернутися до списку</a>
+            <a asp-action="Index">Повернутися до списку</a>
         </div>
     </div>
 }
 else
 {
-    <p class="text-secondary">Помилка: Неможливо відобразити деталі товару.</p>
+    <p>Помилка: Неможливо відобразити деталі товару.</p>
 }

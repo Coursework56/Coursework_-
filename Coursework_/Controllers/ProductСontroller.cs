@@ -153,6 +153,7 @@ namespace Volt.Controllers
         }
 
 
+        [HttpGet]
         public async Task<ActionResult> BuyProduct(int? Id)
         {
             if (Id == null)
@@ -160,7 +161,10 @@ namespace Volt.Controllers
                 return NotFound();
             }
 
-            var product = await _dbContext.Products.FirstOrDefaultAsync(e => e.Id == Id);
+            var product = await _dbContext.Products
+                .Include(p => p.Manufacturer)
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(e => e.Id == Id);
 
             if (product == null)
             {
@@ -175,6 +179,7 @@ namespace Volt.Controllers
 
             return View(purchaseViewModel);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> BuyProduct(Purchase purchase)

@@ -155,13 +155,6 @@ namespace Coursework_.Controllers
 
             if (ModelState.IsValid)
             {
-                // Перевіряємо унікальність назви категорії в базі даних
-                if (_dbContext.Categories.Any(c => c.Name.ToLower() == categoryModel.Name.ToLower()))
-                {
-                    ViewData["ErrorMessage"] = $"Категорія {categoryModel.Name} вже існує";
-                    return View(categoryModel);
-                }
-
                 // Оновлюємо категорію в базі даних
                 var category = new Category(categoryModel);
                 try
@@ -243,13 +236,12 @@ namespace Coursework_.Controllers
         }
 
         // Перевірка унікальності назви категорії для валідації AJAX запитів
-        public IActionResult IsNameUnique(string name)
+        public IActionResult IsNameUnique(string name, int id)
         {
-            if (_dbContext.Categories.Any(c => c.Name.ToLower() == name.ToLower()))
-            {
-                return Json(false);
-            }
-            return Json(true);
+            var existingManufacturer = _dbContext.Categories
+                .Any(m => m.Name == name && m.Id != id);
+
+            return Json(!existingManufacturer);
         }
     }
 }
